@@ -1,0 +1,7 @@
+<div class="row" ng-repeat="house4 in houses | chunkBy:4">
+    <div class="col-lg-3" ng-repeat="house in house4">
+        <div>
+            <house-preview house="house" index="$index" parent-index="$parent.$index" present-house="presentHouse"></house-preview>
+        </div>
+    </div>
+</div>

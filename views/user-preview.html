@@ -1,0 +1,8 @@
+<div id="user-preview" style="width: 300px; height: 300px; max-width: 300px; max-height: 300px; margin: auto">
+	 <img ng-src="data:image/jpg;base64,{{ user.picture }}" style="width: 150px; height: 150px" ng-click="clicked()"/> 
+<!--	<img ng-src="{{ user.profilePicture }}" style="width: 150px; height: 150px;" />-->
+	<p>{{ user.firstName }} {{ user.lastName }}</p>
+	<p>{{ user.email }}</p>
+	<p ng-if="renter == true">{{ approvedText }}</p>
+	<button ng-click="approved()" ng-if="renter == true && user.approved == false" class="btn btn-primary">Approve</button>
+</div>

@@ -1,0 +1,26 @@
+<table style="margin: auto">
+    <tr>
+        <td>
+            <label class="control-label">Email</label>
+        </td>
+        <td style="padding-bottom: 10px;">
+            <input style="width: 120%" type="text" class="form-control form-input" ng-model="logMail" id="email" required />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="control-label">Password</label>
+        </td>
+        <td style="padding-bottom: 20px;">
+            <input style="width: 120%" type="password" class="form-control form-input" ng-model="logPasswd" id="passwd" required />
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left: 30px">
+            <a ng-click="resetPass()" style="cursor: pointer;">Forgot password</a>
+        </td>
+        <td colspan="2" style="text-align: center;">
+            <button class="btn btn-primary" ng-model="submitBtn" ng-click="login()">Login</button>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,41 @@
+<!-- <div style="text-align: center" ng-show="messageSent == false">
+	<input type="text" style="width: 400px" ng-model="subject" />
+	<textarea style="display: block; margin: auto; resize: none" cols="50" rows="10" ng-model="message" />
+	<button ng-click="send()">Send</button>
+</div>
+<h2 ng-show="messageSent == true">{{ statusMessage }}</h2> -->
+<form class="form-horizontal" ng-show="messageSent == false">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Send a Message</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Message Subject:</label>
+  <div class="col-md-5">
+  <input id="textinput" name="textinput" type="text" placeholder="Subject" ng-model="subject" class="form-control input-md">
+
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textarea">Message Body:</label>
+  <div class="col-md-5">
+    <textarea class="form-control" id="textarea" cols="12" rows="10" style="resize: none" ng-model="message" name="textarea" placeholder="Ask Away"></textarea>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" ng-click="send()" class="btn btn-primary">Send Message</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+<h2 ng-show="messageSent == true">{{ statusMessage }}</h2>

@@ -1,0 +1,45 @@
+<h2>Password Reset: </h2>
+<style>
+    td {
+        padding-bottom: 10px;
+    }
+</style>
+<table id="resetForm" style="margin: auto">
+    <tr>
+        <td>
+            <label class="control-label">Email</label>
+        </td>
+        <td>
+            <input class="form-control form-input" ng-model="email" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="control-label">New Password</label>
+        </td>
+        <td>
+            <input class="form-control form-input" ng-model="pass" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="control-label">Repeat Password</label>
+        </td>
+        <td>
+            <input class="form-control form-input" ng-model="rePass" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="control-label">Security Code</label>
+        </td>
+        <td>
+            <input class="form-control form-input" ng-model="secCode" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: right;">
+            <button class="btn btn-danger" ng-click="reset()">Reset Password</button>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,275 @@
+<div>
+    <div id="main-area">
+        <h4 class="center">Step {{ page }} / 8</h4>
+        <!-- Map - Location -->
+        <div class="center" ng-show="page == 1">
+            <h3>Location</h3>
+            <!-- By Map -->
+            <div id="map"></div>
+        </div>
+
+        <!-- Various Numbers -->
+        <div id="numbers" ng-show="page == 2">
+            <h3 class="type-title">A little bit about the house</h3>
+            <table style="border-spacing: 5em;">
+                <tr>
+                    <td style="width: 40%;">
+                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(0)" src="../pics/minus.svg">
+                        <span ng-model="house.numBeds">{{ house.numBeds }}</span>
+                        <img style="width: 25%; margin-left: 2px" ng-click="more(0)" src="../pics/plus.png">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="display: inline-block">Number of beds</label>
+                    </td>
+                </tr>
+                <tr style="padding-bottom: 10px">
+                    <td style="width: 7%;">
+                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(1)" src="../pics/minus.svg">
+                        <span style="display: inline-block" ng-model="house.numBaths">{{ house.numBaths }}</span>
+                        <img style="width: 25%; margin-left: 2px" ng-click="more(1)" src="../pics/plus.png">
+                    </td>
+                    <td>
+                        <label style="display: inline-block">Number of bathrooms</label>
+                    </td>
+                </tr>
+                <tr style="padding-bottom: 10px">
+                    <td style="width: 7%">
+                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(2)" src="../pics/minus.svg">
+                        <span style="display: inline-block" ng-model="house.accommodates">{{ house.accommodates }}</span>
+                        <img style="width: 25%; margin-left: 2px" ng-click="more(2)" src="../pics/plus.png">
+                    </td>
+                    <td>
+                        <label style="display: inline-block">Accommodates</label>
+                    </td>
+                </tr>
+            </table>
+
+
+
+        </div>
+
+        <!-- House rules -->
+        <div ng-show="page == 3">
+            <h3 style="text-align: center">House rules</h3>
+            <table style="margin: 1em auto; margin-top: 30px">
+                <tr>
+                    <td>
+                        <input style="vertical-align: center" ng-model="house.smoking" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Is smoking allowed?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.pets" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Are pets allowed?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.livingRoom" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Does this place have a living room?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.events" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Are events allowed?</label>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <!-- Amenities -->
+        <div ng-show="page == 4">
+            <h3 style="text-align: center">Amenities</h3>
+            <table style="margin: 1em auto; margin-top: 30px">
+                <tr>
+                    <td>
+                        <input style="vertical-align: center" ng-model="house.wifi" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Is there WiFi availability?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.airconditioning" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Is there air-conditioning?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.heating" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Does this place have heating?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.kitchen" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px;">Does this place have a kitchen?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.tv" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px">Does this place have a TV?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.parking" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px">Does this place offer parking?</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input ng-model="house.elevator" type="checkbox">
+                    </td>
+                    <td style="text-align: left">
+                        <label style="margin-left: 5px">Does this place have an elevator?</label>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <!-- House info -->
+        <div ng-show="page == 5">
+            <h3 style="text-align: center">About the house</h3>
+            <table style="margin: 1em auto; margin-top: 30px; border-collapse: collapse">
+                <tr>
+                    <td style="text-align: right; padding-right: 10%">
+                        <label for="area">Area</label>
+                    </td>
+                    <td style="padding-top: 1em; padding-bottom: .5em; text-align: left">
+                        <input type="number" class="form-control" style="width: 20%; display: inline-block" ng-model="house.area" id="area"> cm
+                        <span style="position: relative; bottom: 1ex; font-size: 80%">2</span>
+                        <span class="error" ng-if="errors.areaReq == true">Please fill in this area</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Description</label>
+                    </td>
+                    <td>
+                        <textarea style="resize: none" rows="5" cols="50" placeholder="A small description of the house" ng-model="house.desc"></textarea>
+                        <span class="error" ng-if="errors.descReq == true">Please fill in this area</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Getting there</label>
+                    </td>
+                    <td>
+                        <textarea style="resize: none" rows="5" cols="50" placeholder="Ex. 'How to get to the house from the closest city/airport/port'" ng-model="house.instructions"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Available dates -->
+        <div ng-show="page == 6">
+            <h3 style="text-align: center">Dates</h3>
+            <div class="center">
+                <label style="margin-right: 10px;">Dates: </label>
+                <input type="text" id="datepicker" ng-init="initDatepicker()" />
+            </div>
+            <table style="width: 30%; margin: 1em auto; text-align: center; margin-top: 50px">
+                <tr class="max-width; padding-top: 50px;">
+                    <td style="width: 30%;">
+                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(3)" src="../pics/minus.svg">
+                        <p style="display: inline-block" ng-model="house.minDays">{{ house.minDays }}</p>
+                        <img style="width: 25%; margin-left: 2px" ng-click="more(3)" src="../pics/plus.png">
+                    </td>
+                    <td style="text-align: left; padding-top: 0px">
+                        <label style="display: inline-block;">Minimum number of days</label>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <!-- Cost -->
+        <div ng-show="page == 7">
+            <div style="text-align: center;">
+                <h3>Cost</h3>
+                <form class="form-horizontal" style="margin-left: 40%">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="textinput">Minimum Cost: </label>
+                            <div class="col-md-2">
+                                <input class="form-control input-md" ng-model="house.minCost" type="number" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="textinput">Cost per person: </label>
+                            <div class="col-md-2">
+                                <input class="form-control input-md" ng-model="house.costPerPerson" type="number" />
+
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost per day: </label>
+                            <div class="col-md-2">
+                                <input class="form-control input-md" ng-model="house.costPerDay" type="number" />
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div ng-show="page == 8">
+            <h3 style="text-align: center">Picture</h3>
+            <table style="margin: auto">
+                <tr>
+                    <td>
+                        <input type="file" file-model="housePic1">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="file" file-model="housePic2">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="file" file-model="housePic3">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="text-align: center" ng-show="page == 9">
+            <h2>Successfully registered house</h2>
+        </div>
+
+
+    </div>
+    <div ng-show="page != 9" style="text-align: center; min-height: 100px; max-height: 100px">
+        <button id="next-btn" class="btn btn-primary" ng-click="next()">Next</button>
+        <button ng-show="page != 1" ng-click="back()">Back</button>
+    </div>
+</div>

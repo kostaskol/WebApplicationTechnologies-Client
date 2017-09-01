@@ -1,0 +1,77 @@
+.housePres {}
+
+.housePres .slider {
+    width: 800px;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+    background: #e6e6e6;
+    border: 20px solid #FFF;
+    margin-top: 20px;
+}
+
+.housePres .slide {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    top: 0;
+    left: 0;
+}
+
+.housePres .arrow {
+    position: absolute;
+    z-index: 1002;
+    display: block;
+    top: 50%;
+    margin-top: -35px;
+    width: 36px;
+    height: 71px;
+    outline: none;
+    cursor: pointer;
+}
+
+.housePres .arrow.prev {
+    opacity: 0.2;
+    left: 20px;
+    background-image: url(../pics/paddle_prev_999.png);
+    transition: 0.2s linear all;
+}
+
+.housePres .arrow.next {
+    opacity: 0.2;
+    right: 20px;
+    background-image: url(../pics/paddle_next_999.png);
+    transition: 0.2s linear all;
+}
+
+.housePres table td {
+    padding-left: 10px
+}
+
+.housePres .dots .dot {
+    position: relative;
+    margin: 0 8px;
+    width: 12px;
+    height: 12px;
+}
+
+.housePres .dots .dot a.active {
+    border-color: #FFF;
+    background-color: transparent;
+}
+
+.housePres .hr-div {
+    margin: 10px auto 10px auto; 
+    background-color: black; 
+    border-style: solid; 
+    border-width: 1px; 
+    width: 30%;
+}
+
+.housePres #comment-section .hr-div {
+    margin: 10px auto 10px auto; 
+    background-color: black; 
+    border-style: solid; 
+    border-width: 1px; 
+    width: 100%
+}

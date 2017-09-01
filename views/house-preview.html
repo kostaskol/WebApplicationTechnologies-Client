@@ -1,0 +1,26 @@
+﻿<div class="preview" style="margin-bottom: 150px" ng-click="clicked()">
+    <img style="width: 200px; height: 200px; " ng-src="data:image/jpg;base64,{{ house.picture }}"> 
+    <table style="margin: auto">
+        <tr>
+            <td style="width: 40%">
+                <div id="rating">
+                    <ng-rate-it ng-show="house.numRatings != 0" ng-model="house.rating" read-only="true" style="display: inline-block"></ng-rate-it>
+                    <span ng-show="house.numRatings != 0" style="display: inline-block">({{ house.numRatings }} Reviews)</span>
+                    <p ng-show="house.numRatings == 0">No reviews</p>
+                </div>
+            </td>
+        </tr>
+            <tr>
+                <td style="width: 20%">
+                <div id="house-cost">
+                    <span id="house-cost-text"><b>{{ house.minCost }} €</b></span>
+                </div>
+            </td>
+        </tr>
+            <tr>
+            <td style="width: 40%">
+                <span id="house-city-country">{{ house.city }}</span><span ng-if="house.city != null">,</span><span> {{ house.country }}</span>
+            </td>
+        </tr>
+    </table>
+</div>

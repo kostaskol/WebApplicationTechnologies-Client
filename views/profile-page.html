@@ -1,0 +1,26 @@
+<div id="profile-page">
+	<table style="margin: auto;">
+		<tr>
+			<td colspan="2">
+				<img style="width: 350px; height: 350px" ng-src="{{ user.profilePicture }}" />
+			</td>
+		</tr>
+		<tr style="text-align: center">
+			<td colspan="2">
+				<p>{{ user.fName }} {{ user.lName }} </p>
+			</td>
+		</tr>
+		<tr style="text-align: center">
+			<td colspan="2">
+				<p>{{ user.description }}</p>
+
+			</td>
+		</tr>
+		<tr style="text-align: center">
+			<td colspan="2">
+				<a style="cursor: pointer" ng-click="message()">Message them</a>
+
+			</td>
+		</tr>
+	</table>
+</div>

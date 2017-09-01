@@ -1,0 +1,69 @@
+<div id="user-pres" style="text-align: center;">
+	<div ng-show="gotResponse == false">
+		<img ng-src="data:image/jpg;base64,{{ user.picture }}" style="width: 150px; height: 150px; max-width: 150px; max-height: 150px" />
+		<table style="margin: auto">
+			<tr>
+				<td>
+					<label>First Name: </label>
+				</td>
+				<td>
+					<input type="text" ng-model="user.firstName" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Last Name: </label>
+				</td>
+				<td>
+					<input type="text" ng-model="user.lastName" />
+				</td>
+			</tr>
+			<tr>
+			    <td>
+			        <label>Phone Number: </label>
+			    </td>
+			    <td>
+			        <input type="text" ng-model="user.pNum" />
+			    </td>
+			</tr>
+			<tr>
+			    <td>
+			        <label>Date Of Birth: </label>
+			    </td>
+			    <td>
+			        <input type="date" ng-model="user.dateOfBirth" />
+			    </td>
+			</tr>
+			<tr>
+			    <td>
+			        <label>Country of residence</label>
+			    </td>
+			    <td>
+			        <input type="text" ng-model="user.country" />
+			    </td>
+			</tr>
+			<tr>
+				<td>
+					<label>Bio</label>
+				</td>
+				<td>
+					<textarea style="resize: none" ng-model="user.bio" />
+				</td>
+			</tr>
+			<tr>
+			    <td colspan="2">
+			        {{ approvedText }}
+			    </td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button ng-click="save()">Save changes</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div ng-show="gotResponse == true">
+		<h2>{{ responseText }}</h2>
+	</div>
+	
+</div>

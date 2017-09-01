@@ -1,0 +1,231 @@
+<div id="house-search" class="center-form">
+    <h3 style="text-align: center">Page {{ page + 1 }} / 7</h3>
+    <!-- Location -->
+    <div ng-show="page == 0">
+        <h3 style="text-align: center">Location</h3>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-2">City: </label>
+                <div class="col-sm-10">
+                    <input type="text" style="width: 100%; margin-left: 10px" class="form-control form-input" ng-model="city" id="city" />
+                </div>
+                <label class="control-label col-sm-2" style="margin-top: 20px;" for="country">Country: </label>
+                <div class="col-sm-10">
+                    <input type="text" style="width: 100%; margin-top: 30px; margin-left: 10px" class="form-control form-input" ng-model="country" id="country" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Various Numbers -->
+    <div ng-show="page == 1">
+        <h3 style="text-aling: center;">Numbers (TODO: Change this)</h3>
+        <table style="margin: auto">
+            <tr class="spaced-row">
+                <td style="width: 40%;">
+                    <quant-picker more-func="more" less-func="less" item="numBeds" num="0"></quant-picker>
+                </td>
+                <td style="text-align: left">
+                    <label style="display: inline-block">Number of beds</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="width: 40%;">
+                    <quant-picker more-func="more" less-func="less" item="numBaths" num="1"></quant-picker>
+                </td>
+                <td style="text-align: left">
+                    <label style="display: inline-block">Number of bathrooms</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="width: 40%;">
+                    <quant-picker more-func="more" less-func="less" item="accommodates" num="2"></quant-picker>
+                </td>
+                <td style="text-align: left">
+                    <label style="display: inline-block">Accommodates</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- House Rules -->
+    <div ng-show="page == 2">
+        <h3 style="text-align: center">House Rules</h3>
+        <table style="margin: auto; width: 70%">
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="livingRoom" />
+                </td>
+                <td style="text-align: left">
+                    <label>Living room</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="smoking" />
+                </td>
+                <td style="text-align: left">
+                    <label>Smoking</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="events" />
+                </td>
+                <td style="text-align: left">
+                    <label>Events are allowed</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="pets" />
+                </td>
+                <td style="text-align: left">
+                    <label>Pets are allowed</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Amenities -->
+    <div ng-show="page == 3">
+        <h3 style="text-align: center">Amenities</h3>
+        <table style="margin: auto; width: 70%;">
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="wifi" />
+                </td>
+                <td style="text-align: left">
+                    <label>WiFi</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="airconditioning" />
+                </td>
+                <td style="text-align: left">
+                    <label>Airconditioning</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="heating" />
+                </td>
+                <td style="text-align: left">
+                    <label>Heating</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="kitchen" />
+                </td>
+                <td style="text-align: left">
+                    <label>Kitchen</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="tv" />
+                </td>
+                <td style="text-align: left">
+                    <label>TV</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="parking" />
+                </td>
+                <td style="text-align: left">
+                    <label>Parking</label>
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="text-align: left">
+                    <input type="checkbox" ng-model="elevator" />
+                </td>
+                <td style="text-align: left">
+                    <label>Elevator</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Dates -->
+    <div ng-show="page == 4">
+        <h2 style="text-align: center">Dates</h2>
+        <table style="margin: auto">
+            <tr class="spaced-row">
+                <td>
+                    <input type="text" ng-init="initialiseDate()" id="date-picker" />
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td style="width: 40%">
+                    <quant-picker more-func="more" less-func="less" item="minDays" num="3"></quant-picker>
+                </td>
+                <td style="text-align: left">
+                    <label>Minimum amount of days</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Cost -->
+    <div ng-show="page == 5">
+        <h3 style="text-align: center">Cost</h3>
+        <table>
+            <tr class="spaced-row">
+                <td>
+                    <label class="control-label">Minimum cost:</label>
+                </td>
+                <td>
+                    <input type="number" style="width: 100%; margin-left: 20px;" class="form-control form-input" ng-model="minCost" id="minCost" />
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td>
+                    <label class="control-label">Maximum cost: </label>
+                </td>
+                <td>
+                    <input type="number" style="margin-left: 20px; width: 100%" class="form-control form-input" ng-model="maxCost" id="maxCost" />
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td>
+                    <label class="control-label">Minimum cost per person</label>
+                </td>
+                <td>
+                    <input type="number" style="width: 100%; margin-left: 20px" class="form-control form-input" ng-model="minCostPerPerson" id="minCostPerPerson" />
+                </td>
+            </tr>
+            <tr class="spaced-row">
+                <td>
+                    <label class="control-label">Maximum cost per person</label>
+                </td>
+                <td>
+                    <input type="number" style="width: 100%; margin-left: 20px" class="form-control form-input" ng-model="maxCostPerPerson" id="maxCostPerPerson" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Various -->
+    <div ng-show="page == 6">
+        <h3 style="text-align: center">Various</h3>
+        <table>
+            <tr class="spaced-row">
+                <td style="width: 40%">
+                    <quant-picker more-func="more" less-func="less" item="rating" num="4"></quant-picker>
+                </td>
+                <td>
+                    <label>Minimum Rating</label>
+                </td>
+            </tr>
+        </table>
+        <label class="control-label col-sm-2">Minimum area: </label>
+        <div class="col-sm-10">
+            <input type="number" style="width: 100%; margin-left: 20px" class="form-control form-input" ng-model="area" id="area" />
+        </div>
+    </div>
+
+
+</div>
+<div style="text-align: center" ng-if="page != 7">
+    <button ng-click="nextPage()" class="btn btn-primary">Next</button>
+    <a ng-click="prevPage()" style="cursor: pointer; text-decoration: none;">previous</a>
+
+</div>

@@ -1,0 +1,29 @@
+#house-search {
+	height: 400px;
+	min-height: 400px;
+	max-height: 400px;
+}
+
+#house-search .spaced-row {}
+
+tr.spaced-row > td {
+	padding-bottom: 10px;
+}
+
+#house-search input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	-webkit-appearance: none;
+	background-color: white;
+	border-radius: 100%;
+	border: 2px solid gray;
+	margin-right: 40%;
+}
+
+#house-search input[type="checkbox"]:checked {
+	background-color: black;
+}
+
+#house-search table {
+	margin: auto;
+}

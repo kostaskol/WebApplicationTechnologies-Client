@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>AirBnB</title>
+
+    <meta name="keywords" content="ng-map,AngularJS,center">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!-- JQuery - Dependency for bootstrap -->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="node_modules/bootstrap337/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap DatePicker -->
+    <link rel="stylesheet" href="node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+    <script src="node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- Bootstrap Select -->
+    <link rel="stylsheet" href="node_modules/bootstrap-select/css/bootstrap-select.min.css" />
+
+    <!-- Angular-Rateit Css -->
+    <link rel="stylesheet" href="node_modules/angular-rateit/dist/ng-rateit.css" />
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="css/regHouse.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/404.css" />
+    <link rel="stylesheet" href="css/signup.css" />
+    <link rel="stylesheet" href="css/general.css" />
+    <link rel="stylesheet" href="css/housePres.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/housePrev.css" />
+    <link rel="stylesheet" href="css/findHouse.css" />
+    <link rel="stylesheet" href="css/profile-page.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <!-- Fonts (Google) -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+
+    <!-- Plain Javascript functionality -->
+    <script src="app/cookieFinder.js"></script>
+    <script src="app/classes.js"></script>
+    <script src="app/location.js"></script>
+
+    <!-- Angular -->
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="node_modules/angular-route/angular-route.min.js"></script>
+    <script src="node_modules/angular-animate/angular-animate.min.js"></script>
+    <script src="node_modules/angular-cookies/angular-cookies.min.js"></script>
+    <script src="node_modules/angular-rateit/dist/ng-rateit.min.js"></script>
+
+    <!-- Angular Filter -->
+    <script src="node_modules/angular-filter/dist/angular-filter.min.js"></script>
+
+    <!-- TweenMax -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.10.3/TweenMax.min.js"></script>
+
+    <!-- Google Maps Api -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo3zgPrFpdoDXiWkptrjYFC9JwghbpitM" type="text/javascript"></script>
+
+    <!-- VKBeautify -->
+    <script src="node_modules/VKBeautify/vkbeautify.js"></script>
+
+    <!-- Air Datepicker -->
+    <link href="bower_components/air-datepicker/dist/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="bower_components/air-datepicker/dist/js/datepicker.min.js"></script>
+    <!-- Air Datepicker English Language -->
+    <script src="bower_components/air-datepicker/dist/js/i18n/datepicker.en.js"></script>
+
+
+    <!-- Sweet alert -->
+    <script src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="node_modules/sweetalert/dist/sweetalert.css" />
+
+
+
+    <!-- Controllers -->
+    <script src="controllers/airbnb.js"></script>
+    <script src="controllers/loginCtrl.js"></script>
+    <script src="controllers/signUpCtrl.js"></script>
+    <script src="controllers/housePresCtrl.js"></script>
+    <script src="controllers/homeCtrl.js"></script>
+    <script src="controllers/settingsCtrl.js"></script>
+    <script src="controllers/findHouseCtrl.js"></script>
+    <script src="controllers/regHouseCtrl.js"></script>
+    <script src="controllers/housePreviewCtrl.js"></script>
+    <script src="controllers/houseListCtrl.js"></script>
+    <script src="controllers/searchResultsCtrl.js"></script>
+    <script src="controllers/profilePageCtrl.js"></script>
+    <script src="controllers/messageCtrl.js"></script>
+    <script src="controllers/adminCtrl.js"></script>
+    <script src="controllers/userListCtrl.js"></script>
+    <script src="controllers/userPresCtrl.js"></script>
+    <script src="controllers/passResetCtrl.js"></script>
+    <script src="controllers/myProfileCtrl.js"></script>
+    <script src="controllers/houseEditCtrl.js"></script>
+
+    <script src="controllers/testCtrl.js"></script>
+
+    <!-- Directives -->
+    <script src="directives/file-upload-dir.js"></script>
+    <script src="directives/house-preview-dir.js"></script>
+    <script src="directives/house-list-dir.js"></script>
+    <script src="directives/quant-picker-dir.js"></script>
+    <script src="directives/user-list-dir.js"></script>
+    <script src="directives/user-preview-dir.js"></script>
+    <script src="directives/tick-cross-dir.js"></script>
+    <script src="directives/choice-dir.js"></script>
+    <script src="directives/pagination-dir.js"></script>
+    <script src="directives/booking-list-dir.js"></script>
+    <script src="directives/user-edit-list-dir.js"></script>
+    
+    <!-- Services -->
+    <script src="services/HouseService.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function() {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#64386b",
+                        "text": "#ffcdfd"
+                    },
+                    "button": {
+                        "background": "#f8a8ff",
+                        "text": "#3f0045"
+                    }
+                }
+            })
+        });
+
+    </script>
+
+    <!-- Custom Javascript -->
+    <script src="app/fileReader.js"></script>
+    <script src="app/test-houses.js"></script>
+    <script src="app/getUser.js"></script>
+    <script src="app/dates.js"></script>
+
+    <!-- Constants -->
+    <script src="app/constants.js"></script>
+
+</head>
+
+<body ng-app="airbnbApp" ng-controller="airbnbController">
+    <div ng-show="showNav == true" ng-include="'views/navbar.html'"></div>
+    <div ng-view>
+    </div>
+</body>
+
+</html>

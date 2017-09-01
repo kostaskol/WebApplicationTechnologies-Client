@@ -1,0 +1,12 @@
+.center-table {
+	width: 400px;
+	height: 100px;
+	background-color: white;
+	margin: auto;
+	margin-top: 10%;
+	top: 50%;
+	bottom: 50%;
+}
+
+#login-form {
+}

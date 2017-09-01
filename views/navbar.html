@@ -1,0 +1,30 @@
+<div class="banner">
+    <nav role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" style="color: white;" href="/index.html">AirBnB</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#!/home">Home</a></li>
+                <li><a href="#!/find-house">Find a house</a></li>
+                <li ng-if="renter == true && user.approved == true"><a href="#!/register-house">Register new house</a></li>
+                <li ng-if="!user.approved && loggedIn"><a>Register new house: Awaiting for approval</a></li>
+            </ul>
+
+            <!-- Right Side Menu -->
+            <ul class="nav navbar-nav pull-right">
+                <li ng-if="loggedIn == false"><a href="#!/signup">Sign Up</a></li>
+                <li ng-if="loggedIn == false"><a href="#!/login">Login</a></li>
+                <li ng-if="loggedIn == true">
+                    <img style="width: 50px; max-width: 50px; height: 50px; max-height: 50px; display: inline-block; margin-right: -3px;" 
+                         ng-src="data:image/jpg;base64,{{ user.picture }}" /></li>
+
+                <li ng-if="loggedIn == true"><a href="#!/myprofile">My profile</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div style="width: 100%; background-color: black; border-style: solid; border-width: 0.1px;"></div>
+</div>
+<p class="logo">
+    AirBnB. Accommodation made easy.
+</p>

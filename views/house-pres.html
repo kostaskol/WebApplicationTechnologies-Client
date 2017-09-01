@@ -1,0 +1,252 @@
+<div class="housePres" ng-show="show==true">
+    <div class="container slider">
+        <h2 style="float: left; position: absolute">House Presentation</h2>
+        <img ng-repeat="picture in house.pictures" class="slide slide-animation" ng-hide="!isCurrentSlideIndex($index)" ng-src="data:image/jpg;base64,{{ picture }}" />
+
+        <a class="arrow prev" ng-click="nextSlide()"></a>
+        <a class="arrow next" ng-click="prevSlide()"></a>
+
+        <nav class="nav">
+            <div class="wrapper">
+                <ul class="dots">
+                    <li class="dot" ng-repeat="picture in pictures">
+                        <a href="#" ng-class="{'active': isCurrentSlideIndex($index)}" ng-click="setCurrentSlideIndex($index)">hi</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <table style="margin: auto">
+        <tr>
+            <td>Owner: </td>
+            <td><a ng-click="goToProfile()" style="cursor: pointer">{{ house.ownerName }}</a></td>
+        </tr>
+        <tr>
+            <td>House Address: </td>
+            <td>{{ house.address }}</td>
+        </tr>
+        <tr>
+            <td>Minimum Cost: </td>
+            <td>{{ house.minCost }}</td>
+        </tr>
+        <tr>
+            <td>Cost per person: </td>
+            <td>{{ house.costPerPerson }}</td>
+        </tr>
+        <tr>
+            <td>Cost per day: </td>
+            <td>{{ house.costPerDay }}</td>
+        </tr>
+        <tr>
+            <td>Number of beds: </td>
+            <td>{{ house.numBeds }}</td>
+        </tr>
+        <tr>
+            <td>Number of bathrooms: </td>
+            <td>{{ house.numBaths }}</td>
+        </tr>
+        <tr>
+            <td>Accommodates: </td>
+            <td>{{ house.accommodates }}</td>
+        </tr>
+        <tr>
+            <td>Living room: </td>
+            <td ng-show="house.livingRoom">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.livingRoom">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr> 
+        <tr>
+            <td>Smoking: </td>
+            <td ng-show="house.smoking">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.smoking">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Events: </td>
+            <td ng-show="house.events">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.events">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>WiFi: </td>
+            <td ng-show="house.wifi">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.wifi">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Airconditioning: </td>
+            <td ng-show="house.airconditioning">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.airconditioning">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Heating: </td>
+            <td ng-show="house.heating">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.heating">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Kitchen: </td>
+            <td ng-show="house.kitchen">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.kitchen">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>TV: </td>
+            <td ng-show="house.tv">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.tv">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Parking: </td>
+            <td ng-show="house.parking">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.parking">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Elevator: </td>
+            <td ng-show="house.elevator">
+                <span class="glyphicon glyphicon-ok"></span>
+            </td>
+            <td ng-show="!house.elevator">
+                <span class="glyphicon glyphicon-remove"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Area: </td>
+            <td>{{ house.area }}</td>
+        </tr>
+        <tr>
+            <td>Description: </td>
+            <td>{{ house.description }}</td>
+        </tr>
+        <tr>
+            <td>Getting there: </td>
+            <td>{{ house.instructions }}</td>
+        </tr>
+        <tr>
+            <td>Minimum amount of days: </td>
+            <td>{{ house.minDays }}</td>
+        </tr>
+        <tr ng-if="house.numRatings != 0">
+            <td>Rating: </td>
+            <td>
+                <ng-rate-it ng-model="house.rating" read-only="true"></ng-rate-it>
+            </td>
+        </tr>
+        <tr ng-if="house.numRatings == 0" style="text-align: left">;
+            <td></td>
+            <td colspan="2">No reviews</td>
+        </tr>
+        <tr>
+            <td>Number of ratings</td>
+            <td>{{ house.numRatings }}</td>
+        </tr>
+        <tr>
+            <td>Available from: </td>
+            <td>{{ house.dateFrom }}</td>
+        </tr>
+        <tr>
+            <td>Available to: </td>
+            <td>{{ house.dateTo }}</td>
+        </tr>
+    </table>
+
+
+    <!-- Google Map -->
+    <h3 style="text-align: center">Location</h3>
+    <div id="housePresMap" style="width: 400px; height: 400px; margin: auto"></div>
+
+    <!-- Booking -->
+    <div id="booking" ng-if="loggedIn">
+        <h3 style="text-align: center">Book this house now</h3>
+        <div style="margin: auto">
+            <table style="margin: auto; box-shadow: 10px 10px 5px grey; border: 2px solid; border-radius: 5%" ng-init="init()">
+                <tr>
+                    <td>
+                        <label>Date From: </label>
+                    </td>
+                    <td style="padding-bottom: 10px; padding-top: 10px; padding-right: 10px">
+                        <input ng-model="bookingDate" type="text" data-language="en" id="bookDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <label>Guests: </label>
+                    </td>
+                    <td style="padding-bottom: 10px;">
+                        <quant-picker more-func="more" less-func="less" item="guests" num="0"></quant-picker>
+
+                    </td>
+                </tr>
+                <tr ng-if="showCost">
+                    <td></td>
+                    <td style="padding-bottom: 10px;">
+                        {{ finalCost }}€
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-left: 30%; padding-bottom: 20px">
+                        <button ng-click="book()" class="btn btn-primary">Book Now</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- User Comment -->
+    <h3 style="text-align: center;">Comments</h3>
+    <table style="margin: auto; background-color: white">
+        <tr>
+            <td>
+                <textarea cols="90" rows="4" style="resize: none" ng-model="userComment"></textarea>
+                <ng-rate-it style="text-align: right;" ng-model="userRating" resetable="false"></ng-rate-it>
+            </td>
+        </tr>
+        <tr style="text-align: right">
+            <td>
+                <a ng-click="emptyComm()" style="cursor: pointer">Cancel</a>
+                <button data-ng-disabled="userComment == ''" ng-click="newComment()">Comment</button>
+            </td>
+        </tr>
+    </table>
+    <div class="hr-div"></div>
+
+    <!-- Comments -->
+    <div id="comment-section" style="margin: auto; max-width: 30%" ng-repeat="comment in comments">
+        <p style="display: inline-block">{{ comment.userFName }} {{ comment.userLName }}</p>
+        <ng-rate-it ng-model="comment.rating" style="display: inline-block;" read-only="true" />
+        <p style="text-align: justify;">{{ comment.comment }}</p>
+        <div class="hr-div"></div>
+    </div>
+</div>

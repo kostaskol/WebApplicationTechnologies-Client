@@ -1,0 +1,31 @@
+#main-area {
+    width: 100%;
+    min-height: 450px;
+    max-height: 450px;
+}
+
+.center {
+    text-align: center;
+}
+
+.max-width {
+    width: 100%;
+}
+
+#map {
+    width: 300px;
+    height: 300px;
+    border-style: solid;
+    margin: 0 auto 15px auto;
+}
+
+.type-title {
+    text-align: center;
+    font-size: 25px;
+}
+
+#numbers > table {
+    width: 20%;
+    margin: 1em auto;
+}
+

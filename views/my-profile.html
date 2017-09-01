@@ -1,0 +1,140 @@
+<style>
+    .shown {
+        display: block;
+    }
+    
+    .hide {
+        display: none;
+    }
+
+</style>
+<div style="">
+    <nav style="width: 10%; height: 100%; min-height: 100%; float: left; position: absolute; border-right: 3px solid;" class="my-profile">
+        <ul class="nav">
+            <li><a href ng-click="showProfile()">Profile</a></li>
+            <li>
+                <a href id="messages-btn" data-toggle="collapse" data-target="#message-sub" aria-expanded="false">
+                Messages
+                <span style="float: right" class="glyphicon glyphicon-chevron-down"></span>
+            </a>
+            </li>
+            <ul class="nav collapse" id="message-sub" aria-labelledby="#messages-btn">
+                <li><a href ng-click="showMessages(0)">Inbox</a></li>
+                <li><a href ng-click="showMessages(1)">Sent</a></li>
+            </ul>
+            <li ng-if="renter"><a href id="houses-btn" data-toggle="collapse" data-target="#houses-sub" aria-expanded="false">Houses<span style="float: right" class="glyphicon glyphicon-chevron-down"></span></a></li>
+            <ul class="nav collapse" id="houses-sub" aria-labelledby="#houses-btn">
+                <li><a href ng-click="showHouses()">Edit houses</a></li>
+                <li><a href ng-click="uploadPhotos()">Upload more photos</a></li>
+            </ul>
+            <li><a href id="bookings-btn" data-toggle="collapse" data-target="#bookings-sub" aria-expanded="false">Bookings<span style="float: right" class="glyphicon glyphicon-chevron-down"></span></a></li>
+            <ul class="nav collapse" id="bookings-sub" aria-labelledby="#bookings-btn">
+                <li><a href ng-click="showBooked(0)">Houses I have booked</a></li>
+                <li ng-if="renter"><a href ng-click="showBooked(1)">My booked houses</a></li>
+            </ul>
+            <li><a href ng-click="signOut()">Sign Out</a></li>
+
+        </ul>
+    </nav>
+    <div id="content">
+        <!-- Show user's profile -->
+        <div ng-show="type == 'mp'">
+            <h2 style="text-align: center">My profile</h2>
+            <img style="width: 200px; max-width: 200px; height: 200px; max-height: 200px; display: block; margin: auto" ng-src="data:image/jpg;base64,{{ user.picture }}" />
+            <p style="display: block; margin: auto; width: 100%; text-align: center; font-size: 25px; font-family: 'Times New Roman">{{ user.firstName }} {{ user.lastName }}</p>
+            <p style="display: block; margin: auto; width: 100%; text-align: center; margin-top: 20px">
+                <span ng-if="user.approved" class="glyphicon glyphicon-ok"></span>
+                <span ng-if="!user.approved" class="glyphicon glyphicon-remove"></span> {{ approvedText }}
+            </p>
+            <div style="margin: auto: width: 100%; text-align: center; margin-top: 20px">
+                <button style="margin: auto%; width: auto; text-align: center" class="btn btn-primary" ng-click="changeEmail()">Change Email</button>
+                <form ng-show="showMail && !mailChanged" class="form-inline">
+                    <div class="form-group" style="text-align: center; margin-top: 20px">
+                        <label>New email: </label>
+                        <input style="width: 70%" type="text" ng-model="newMail" class="form-control" />
+                        <button style="margin-top: 10px" ng-click="updateMail()" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+                <p ng-show="showMail && mailChanged" style="text-align: center">Mail updated successfully</p>
+            </div>
+            <form class="form-horizontal" style="margin-top: 40px">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="bio">Bio</label>
+                        <div class="col-md-4">
+                            <textarea style="resize: none" class="form-control" ng-model="user.bio" id="bio" ng-blur="updateUser(0)" placeholder="Write something about yourself" cols="40" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="pNum">Phone Number</label>
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" ng-model="user.pNum" ng-blur="updateUser(1)" />
+                        </div>
+
+                    </div>
+
+
+                </fieldset>
+            </form>
+        </div>
+        <!-- Show inbox -->
+        <div ng-if="type == 'mmi'">
+            <h2 style="text-align: center">My Inbox</h2>
+            <div ng-if="noMessages">
+                <h3 style="text-align: center">You have no messages at this time.</h3>
+            </div>
+            <div ng-if="!noMessages" ng-repeat="message in messages" style="width: 80%; margin: auto; min-height: 40px; margin-left: 15%">
+                <span class="glyphicon glyphicon-remove" style="float: right; cursor: pointer" ng-click="deleteMessage($index)"></span>
+                <div style="cursor: pointer; text-overflow: ellipsis; white-space: nowrap; width: 80%; overflow: hidden" ng-click="showMessage($index)">
+                    <span style="margin: left: 10%" href>{{ message.subject }}</span> -
+                    <span style="color: grey;  ">{{ message.message }}</span>
+                    <span style="float: right">{{ message.name }}</span>
+                </div>
+                <div id="{{$index}}-body" class="hide" style="text-align: center">
+                    <p style="text-align: justify; text-align-last: center; margin-top: 10px">{{ message.message }}</p>
+                    <button class="btn" ng-click="reply($index)">Reply</button>
+                </div>
+
+                <!-- Separator -->
+                <div style="border: solid 1px #e5e5e5; margin-top: 10px; margin-bottom: 15px"></div>
+            </div>
+        </div>
+        <!-- Show sent -->
+        <div ng-if="type == 'mms'">
+            <h2 style="text-align: center">Sent messages</h2>
+            <div ng-if="noMessages">
+                <h3 style="text-align: center">You have no messages at this time.</h3>
+            </div>
+            <div ng-if="!noMessages" ng-repeat="message in messages" style="width: 80%; margin: auto; min-height: 40px; margin-left: 15%">
+                <span class="glyphicon glyphicon-remove" style="float: right; cursor: pointer" ng-click="deleteMessage($index)"></span>
+                <div style="cursor: pointer; text-overflow: ellipsis; white-space: nowrap; width: 80%; overflow: hidden" ng-click="showMessage($index)">
+                    <span style="margin: left: 10%" href>{{ message.subject }}</span> -
+                    <span style="color: grey;  ">{{ message.message }}</span>
+                    <span style="float: right">{{ message.name }}</span>
+                </div>
+                <div id="{{$index}}-body" class="hide" style="text-align: center">
+                    <p style="text-align: justify; text-align-last: center; margin-top: 10px">{{ message.message }}</p>
+                    <button class="btn" ng-click="reply($index)">Reply</button>
+                </div>
+
+                <!-- Separator -->
+                <div style="border: solid 1px #e5e5e5; margin-top: 10px; margin-bottom: 15px"></div>
+            </div>
+        </div>
+        <div ng-if="type == 'bookings'">
+            <div ng-if="hasCurrent">
+                <h2 style="text-align: center">Currently Booked</h2>
+                <booking-list bookings="currentlyBooked"></booking-list>
+            </div>
+
+            <div ng-if="hasPrevious">
+                <h2 style="text-align: center">Previously Booked</h2>
+                <booking-list bookings="previouslyBooked"></booking-list>
+            </div>
+        </div>
+    </div>
+    <div ng-if="type == 'sh'">
+        <h2 style="text-align: center">My houses</h2>
+        <user-edit-list houses="usersHouses"></user-edit-list>
+    </div>
+</div>
