@@ -28,7 +28,7 @@ app.controller('findHouseCtrl', ['$scope', '$http', 'searchResultsService', '$lo
                     });
                 }
             });
-        }
+        };
 
         $scope.more = function(i) {
             console.log("Called with " + i);
@@ -73,10 +73,10 @@ app.controller('findHouseCtrl', ['$scope', '$http', 'searchResultsService', '$lo
 
         $scope.nextPage = function() {
             $scope.page++;
-            if ($scope.page == 1) {
+            if ($scope.page === 1) {
                 console.log("Country: " + $scope.country);
             }
-            if ($scope.page == 7) {
+            if ($scope.page === 7) {
                 console.log("Searching");
                 $scope.search();
             }

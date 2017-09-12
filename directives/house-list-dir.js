@@ -4,7 +4,8 @@ app.directive('houseList', function() {
     return {
         restrict: 'E',
         scope: {
-            houses: '='
+            houses: '=',
+            houseListStyle: '='
         },
         templateUrl: "views/house-list.html",
         controller: 'houseListCtrl'

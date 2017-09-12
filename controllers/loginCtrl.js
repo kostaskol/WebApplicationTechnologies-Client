@@ -24,10 +24,10 @@ app.controller('loginCtrl', ['authenticationService', '$scope', '$location', '$r
             var failCb = function (response) {
                 var data = response['data'];
                 console.log(JSON.stringify(data));
-            }
+            };
 
             authenticationService.login(credentials, succCb, failCb);
-        }
+        };
         
         $scope.resetPass = function() {
             window.alert("Just input 3452")
