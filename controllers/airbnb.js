@@ -44,6 +44,8 @@ app.controller('airbnbController', ['$scope', '$rootScope', '$http', '$cookies',
                     if ($scope.user.accType.charAt(1) == '1') {
                         $scope.renter = true;
                     }
+                    
+                    $cookies.put("enoughData", response.user.enoughData);
 
                 }, function ( /* failure */ error) {
                     // TODO: Remove this comment

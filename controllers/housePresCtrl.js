@@ -1,13 +1,15 @@
 var app = angular.module('airbnbApp');
 
-app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', '$cookies',
-                                 function ($scope, $rootScope, $routeParams, $location, $window, $http, $cookies) {
+app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', '$cookies', 
+    function ($scope, $rootScope, $routeParams, $location, $window, $http, $cookies) {
 
         $scope.houseId = parseInt($routeParams.houseId);
         $scope.currentIndex = 0;
         $scope.guests = 1;
         $scope.dateChosen = false;
-
+        
+        var loggedIn = $cookies.get("loggedIn") == "true";
+        var enoughData = $cookies.get("enoughData") == "true";
 
         function calculateCost() {
             console.log("Calculating cost");
@@ -24,11 +26,8 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
                 calculateCost();
             }
         });
-
-        $http({
-            url: SERVER_URL + "/house/gethouse/" + $scope.houseId,
-            method: "GET"
-        }).then( /* success */ function (response) {
+        
+        var success = function(response) {
             $scope.house = response.data;
             console.log($scope.house.dateFrom);
             //$scope.house.dateFrom = new Date($scope.house.dateFrom);
@@ -44,14 +43,14 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
             } else {
                 bookDateFrom = new Date($scope.house.dateFrom);
             }
-            
+
             console.log($scope.house.excludedDates);
-            
+
             $scope.excludedDates = [];
             for (var i = 0; i < $scope.house.excludedDates.length; i++) {
                 $scope.excludedDates.push(new Date($scope.house.excludedDates[i]));
             }
-            
+
             console.log($scope.excludedDates);
 
             $("#bookDate").datepicker({
@@ -110,10 +109,30 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
                     lng: $scope.house.longitude
                 }
             });
+        }
 
-        }, /* failure */ function (response) {
+        
+        if (loggedIn && !enoughData) {
+            $http({
+                url: SERVER_URL + "/houe/gethouse/" + $scope.houseId,
+                method: "POST",
+                data: $cookies.get("token"),
+                headers: {
+                    "Content-Type": "text/plain"
+                }
+            }).then(/* success */ success,
+                    /* failure */ function(response) {
+                
+            });
+        } else {
+            $http({
+                url: SERVER_URL + "/house/gethouse/" + $scope.houseId,
+                method: "GET"
+            }).then( /* success */ success,
+                    /* failure */ function (response) {
 
-        });
+            });
+        }
 
         $scope.book = function () {
             if ($scope.house.minCost > $scope.finalCost) {

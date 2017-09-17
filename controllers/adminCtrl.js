@@ -3,6 +3,7 @@ var app = angular.module('airbnbApp');
 app.controller('adminCtrl', ['$scope', '$http', '$cookies',
 	function ($scope, $http, $cookies) {
         console.log("Emitting showNav!");
+        $scope.exportBtnText = "Export to XML";
         $scope.$broadcast('showNav', {
             showNav: false
         });
@@ -56,6 +57,7 @@ app.controller('adminCtrl', ['$scope', '$http', '$cookies',
         };
 
         $scope.export = function () {
+            $scope.exportBtnText = "Please wait...";
             $http({
                 url: "http://localhost:8080/airbnb/rest/admin/rawexport",
                 method: "POST",
@@ -64,9 +66,12 @@ app.controller('adminCtrl', ['$scope', '$http', '$cookies',
                 },
                 data: $cookies.get('token')
             }).then( /* success */ function (response) {
-                $scope.xmlString = vkbeautify.xml(response.data);
+                console.log("Response.data = " + response.data);
+                var url = SERVER_URL + "/admin/getxml?t=" + response.data;
+                window.open(url, "_blank");
+                window.focus();
                 $scope.showUsers = false;
-                $scope.showXml = true;
+                $scope.exportBtnText = "Export to XML";
             }, /* failure */ failureFunc);
         };
 

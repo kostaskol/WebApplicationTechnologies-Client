@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('homeCtrl', ['fileUploadService', '$scope', '$http', '$rootScope', '$location', '$cookies',
-    function (fileUploadService, $scope, $http, $rootScope, $location, $cookies) {
+app.controller('homeCtrl', ['fileUploadService', '$scope', '$http', '$rootScope', '$location', '$cookies', '$window',
+    function (fileUploadService, $scope, $http, $rootScope, $location, $cookies, $window) {
         $scope.houseListStyle = {
             "margin": "auto",
             "width": "90%"
@@ -12,6 +12,7 @@ app.controller('homeCtrl', ['fileUploadService', '$scope', '$http', '$rootScope'
         $scope.timesChanged = 0;
 
         $scope.loggedIn = $cookies.get("loggedIn") === "true";
+        $scope.currentPage = 1;
 
         if (!$scope.loggedIn) {
             $http({
@@ -29,18 +30,29 @@ app.controller('homeCtrl', ['fileUploadService', '$scope', '$http', '$rootScope'
                 $cookies.put("loggedIn", false);
             });
         }
+        
+        $http({
+            url: SERVER_URL + "/house/getnumpages",
+            method: "GET"
+        }).then(/* success */ function(response) {
+            $scope.numPages = response.data;
+            $scope.allPages = [];
+            for (var i = 0; i < response.data; i++) {
+                $scope.allPages.push(i + 1);
+            }
+        }, /* failure */ function(response) {
+            
+        });
 
         $http({
-            url: SERVER_URL + "/house/getpage/0?force=true&timestamp=null",
+            url: SERVER_URL + "/house/getpage/0",
             method: "GET"
         }).then( /* success */ function (response) {
             $scope.houseInfo = response.data.houses;
-            $scope.allPages = response.data.numPages;
-
 
             $scope.pages = ["<"];
             console.log("Length: " + $scope.houseInfo.length);
-            for (var i = 0; i < Math.floor($scope.houseInfo.length / PAGE_SIZE) + 1; i++) {
+            for (var i = 0; i < $scope.allPages.length + 1 && i < MAX_SHOWN; i++) {
                 $scope.pages.push(i + 1);
             }
             $scope.pages.push(">");
@@ -56,6 +68,35 @@ app.controller('homeCtrl', ['fileUploadService', '$scope', '$http', '$rootScope'
             window.alert("Server not running");
             console.log("Failed: " + JSON.stringify(response));
         });
+        
+        $scope.getPredicted = function() {
+            $http({
+                url: SERVER_URL + "/house/getpredicted",
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain"
+                },
+                data: $cookies.get("token")
+            }).then(/* success */ function(response) {
+                $scope.predicted = response.data;
+                localStorage.setItem("predicted", JSON.stringify(response.data));
+                $cookies.put("predicted", "true");
+            }, /* failure */ function(response) {
+                console.log(response.data);
+            });
+        }
+
+        if ($cookies.get("loggedIn") == "true" && $cookies.get("predicted") == "false") {
+            $scope.getPredicted();
+        } else {
+            $scope.predicted = window.JSON.parse(localStorage.getItem("predicted"));
+            if ($scope.predicted == null) {
+                $cookies.put("predicted", "false");
+                $scope.getPredicted();
+            }
+        }
+        
+
 
 
 
@@ -72,28 +113,33 @@ app.controller('homeCtrl', ['fileUploadService', '$scope', '$http', '$rootScope'
                 tmp.push(">");
                 $scope.pages = tmp;
                 // slide page array to the right by MAX_SHOWN
-            } else if (index === shown) {
+            } else if (index === $scope.pages.length - 1) {
                 // slide page array to the left by MAX_SHOWN
+                console.log("Go right");
                 if (($scope.timesChanged + 1) * MAX_SHOWN > $scope.allPages.length) return;
 
                 $scope.timesChanged++;
-                var max = MAX_SHOWN * $scope.timesChanged + MAX_SHOWN < $scope.allPages.length ? MAX_SHOWN : $scope.allPages.length;
+                console.log("Times changed = " + $scope.timesChanged);
+                var max = MAX_SHOWN * $scope.timesChanged + MAX_SHOWN < $scope.allPages.length ? $scope.timesChanged * MAX_SHOWN + MAX_SHOWN : $scope.allPages.length;
                 var tmp = ["<"];
                 for (var i = $scope.timesChanged * MAX_SHOWN; i < max; i++) {
+                    console.log("Pushing " + $scope.allPages[i]);
                     tmp.push($scope.allPages[i]);
                 }
                 tmp.push(">");
                 $scope.pages = tmp;
             } else {
                 var actualPage = MAX_SHOWN * $scope.timesChanged + index - 1;
-                console.log("Getting houses from server");
+                $scope.currentPage = actualPage + 1;
+                console.log("Requesting page #" + actualPage);
                 $http({
                     url: SERVER_URL + "/house/getpage/" + actualPage,
                     method: "GET"
                 }).then( /* success */ function (response) {
                     $scope.houseInfo = response.data.houses;
+                    console.log("Length: " + $scope.houseInfo.length);
                     var date = new Date();
-                    HouseService.createHouses(response.data.houses, getParseableDate(new Date()), actualPage);
+                    console.log($scope.houseInfo);
                     $scope.houseInfo.sort(function (a, b) {
                         if (a.minCost > b.minCost) return 1;
                         if (a.minCost < b.minCost) return -1;
