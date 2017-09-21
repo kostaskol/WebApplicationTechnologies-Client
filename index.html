@@ -72,11 +72,12 @@
     <!-- Air Datepicker English Language -->
     <script src="bower_components/air-datepicker/dist/js/i18n/datepicker.en.js"></script>
 
+    <!-- Angular File Upload -->
+    <script src="node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
 
     <!-- Sweet alert -->
     <script src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="node_modules/sweetalert/dist/sweetalert.css" />
-
 
 
     <!-- Controllers -->
@@ -88,7 +89,6 @@
     <script src="controllers/settingsCtrl.js"></script>
     <script src="controllers/findHouseCtrl.js"></script>
     <script src="controllers/regHouseCtrl.js"></script>
-    <script src="controllers/housePreviewCtrl.js"></script>
     <script src="controllers/houseListCtrl.js"></script>
     <script src="controllers/searchResultsCtrl.js"></script>
     <script src="controllers/profilePageCtrl.js"></script>
@@ -99,8 +99,12 @@
     <script src="controllers/passResetCtrl.js"></script>
     <script src="controllers/myProfileCtrl.js"></script>
     <script src="controllers/houseEditCtrl.js"></script>
+    <script src="controllers/houseEditListCtrl.js"></script>
 
     <script src="controllers/testCtrl.js"></script>
+
+    <!-- Services -->
+    <script src="services/HttpCallService.js"></script>
 
     <!-- Directives -->
     <script src="directives/file-upload-dir.js"></script>
@@ -114,10 +118,8 @@
     <script src="directives/pagination-dir.js"></script>
     <script src="directives/booking-list-dir.js"></script>
     <script src="directives/user-edit-list-dir.js"></script>
+    <script src="directives/house-edit-list-dir.js"></script>
     
-    <!-- Services -->
-    <script src="services/HouseService.js"></script>
-
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
     <script>
@@ -143,6 +145,7 @@
     <script src="app/test-houses.js"></script>
     <script src="app/getUser.js"></script>
     <script src="app/dates.js"></script>
+    <script src="app/helpers.js"></script>
 
     <!-- Constants -->
     <script src="app/constants.js"></script>

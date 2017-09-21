@@ -17,3 +17,9 @@ var SERVER_URL = "https://localhost:" + PORT + "/airbnb/rest";
 
 var STATUS_MODIFIED = 401;
 var STATUS_NOT_MODIFIED = 400;
+
+var STATUS_NOT_ENOUGH_DATA = 255;
+
+var generalFailure = function(response) {
+    alert("Got failure response: " + JSON.stringify(response));
+};

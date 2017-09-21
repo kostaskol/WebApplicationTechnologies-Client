@@ -1,6 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', function ($scope, $location, $cookies, $http) {
+app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', '$rootScope',
+    function ($scope, $location, $cookies, HttpCall, $rootScope) {
     var data = {
         token: $cookies.get('token')
     };
@@ -8,7 +9,7 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
     $scope.mailChanged = false;
     $scope.type = 'mp';
 
-    if ($cookies.get("loggedIn") === "false" || $cookies.get("token") == "" || $cookies.get("token") == null) {
+    if ($cookies.get("loggedIn") === "false" || $cookies.get("token") === "" || $cookies.get("token") === null) {
         $location.path("/");
     }
 
@@ -21,58 +22,46 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
                 token: $cookies.get("token")
             };
 
-            $http({
-                url: SERVER_URL + "/user/updateuser",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: data
-            }).then( /* success */ function (response) {
-                console.log("Updated successfully");
+            var updateSuccess = function(response) {
                 $scope.initialBio = $scope.user.bio;
-            }, /* failure */ function (response) {
+            };
 
-            });
+            HttpCall.postJson("user/updateuser", data, updateSuccess, generalFailure);
         }
     };
 
-    $http({
-        url: SERVER_URL + "/user/getuser",
-        data: data,
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }).then( /* success */ function (response) {
-        $scope.user = response.data;
-        $scope.initialBio = response.data.bio;
-        $scope.initialPNum = response.data.pNum;
-        console.log(response.data);
-        if ($scope.user.accType.charAt(RENTER_OFFS) === "1") {
-            $scope.renter = true;
-            if ($scope.user.approved) {
-                $scope.approvedText = "You can register houses";
+    $scope.getUser = function() {
+        var getSuccess = function(response) {
+            $scope.user = response.data;
+            $scope.initialBio = response.data.bio;
+            $scope.initialPNum = response.data.pNum;
+            console.log(response.data);
+            if ($scope.user.accType.charAt(RENTER_OFFS) === "1") {
+                $scope.renter = true;
+                if ($scope.user.approved) {
+                    $scope.approvedText = "You can register houses";
+                } else {
+                    $scope.approvedText = "Your request for house registration is under review. Please check back later";
+                }
             } else {
-                $scope.approvedText = "Your request for house registration is under review. Please check back later";
+                $scope.renter = false;
             }
-        } else {
-            $scope.renter = false;
-        }
-    }, /* failure */ function (response) {
+        };
 
-    });
+        var getFailure = function(response) {
+            $scope.$apply(function() {
+                $location.path("/");
+            });
+        };
+
+        HttpCall.postJson("user/getuser", data, getSuccess, getFailure);
+    };
+
+    $scope.getUser();
+
 
     $scope.showMessages = function (type) {
-        $http({
-            url: SERVER_URL + "/message/receive/" + type,
-            method: "POST",
-            data: $cookies.get("token"),
-            headers: {
-                "Content-Type": "text/plain"
-            }
-        }).then( /* success */ function (response) {
-            console.log(response.data);
+        var messageSuccess = function(response) {
             if (response.data.length === 0) {
                 $scope.noMessages = true;
             } else {
@@ -84,16 +73,15 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
             } else {
                 $scope.type = 'mms';
             }
-        }, /* failure */ function (response) {
+        };
 
-        });
+        HttpCall.postText("message/receive/" + type, $cookies.get("token"), messageSuccess, generalFailure);
     };
 
     $scope.previousIndex = null;
     $scope.shown = false;
     $scope.showMessage = function (index) {
         if ($scope.previousIndex !== null) {
-            console.log("Previous index = " + $scope.previousIndex);
             angular.element("#" + $scope.previousIndex + "-body").removeClass("shown");
             angular.element("#" + $scope.previousIndex + "-body").addClass("hide");
         }
@@ -110,8 +98,6 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
             }
             return;
         }
-
-        console.log("Current index " + index);
 
         $scope.previousIndex = index;
         angular.element("#" + index + "-body").removeClass("hide");
@@ -151,20 +137,33 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
     
     $scope.showHouses = function() {
         $scope.type = "sh";
-        $http({
-           url: SERVER_URL + "/house/getusershousesmin",
-            method: "POST",
-            data: $cookies.get("token"),
-            headers: {
-                "Content-Type": "text/plain"
-            }
-        }).then(/* success */ function(response) {
-            console.log(response.data);
-           $scope.usersHouses = response.data.houses; 
-        }, /* failure */ function(response) {
-            
-        });
+        var housesMinSuccess = function(response) {
+            $scope.usersHouses = response.data;
+            $scope.houseListStyle = {
+                "margin-left": "15%"
+            };
+        };
+
+        HttpCall.postText("house/getusershousesmin", $cookies.get("token"), housesMinSuccess, generalFailure);
     };
+
+    $scope.updateProfilePic = function() {
+        document.getElementById("newProfilePicture").click();
+    };
+
+    $scope.fileSelected = function(files) {
+        var file = files[0];
+        var fd = new FormData();
+        fd.append("file", file);
+        fd.append("token", $cookies.get("token"));
+        var uploadSuccess = function(response) {
+            $scope.getUser();
+            $rootScope.$emit("UpdateNavBar", {});
+        };
+
+        HttpCall.post("user/updateprofile", fd, undefined, uploadSuccess, generalFailure);
+    };
+
 
     $scope.deleteMessage = function (index) {
         swal({
@@ -201,10 +200,12 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
                     });
                 }
             });
-        console.log("Deleting message with subject: " + $scope.messages[index].subject);
     };
 
     var getBookings = function (response) {
+        if (response.data.length === 0) {
+            $scope.noBookings = true;
+        }
         $scope.bookings = response.data;
         $scope.currentlyBooked = [];
         $scope.previouslyBooked = [];
@@ -217,39 +218,20 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
                 $scope.hasCurrent = true;
             }
         }
-        console.log($scope.currentlyBooked);
     };
 
     $scope.showBooked = function (type) {
         $scope.hasCurrent = $scope.hasPrevious = false;
 
+        var token = $cookies.get("token");
+        var url;
         if (type === 0) {
-            $http({
-                url: SERVER_URL + "/booking/getusersbookings",
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain"
-                },
-                data: $cookies.get("token")
-            }).then( /* success */ getBookings,
-                /* failure */
-                function (response) {
-
-                });
+            url = "bookings/getusersbookings";
         } else {
-            $http({
-                url: SERVER_URL + "/booking/getrentersbookings",
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain"
-                },
-                data: $cookies.get("token")
-            }).then( /* success */ getBookings,
-                /* failure */
-                function (response) {
-
-                });
+            url = "bookings/getrentersbookings";
         }
+
+        HttpCall.postText(url, token, getBookings, generalFailure);
         $scope.type = 'bookings';
     };
 
@@ -265,7 +247,7 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
     };
 
     $scope.updateMail = function () {
-        if ($scope.newMail == "" || $scope.newMail == null) {
+        if ($scope.newMail === "" || $scope.newMail === null) {
             console.log("Returning")
             return;
         }
@@ -275,18 +257,10 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', '$http', fun
             newMail: $scope.newMail
         };
 
-        $http({
-            url: SERVER_URL + "/user/changemail",
-            data: data,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then( /* success */ function (response) {
+        var updateMailSuccess = function(response) {
             $scope.mailChanged = true;
-        }, /* failure */ function (response) {
+        };
 
-        });
+        HttpCall.postJson("user/changemail", data, updateMailSuccess, generalFailure);
     };
-
 }]);

@@ -1,15 +1,18 @@
 var app = angular.module('airbnbApp');
 
-app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', '$cookies', 
-    function ($scope, $rootScope, $routeParams, $location, $window, $http, $cookies) {
+app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$window', 'HttpCall', '$cookies',
+    function ($scope, $rootScope, $routeParams, $location, $window, HttpCall, $cookies) {
 
         $scope.houseId = parseInt($routeParams.houseId);
         $scope.currentIndex = 0;
         $scope.guests = 1;
         $scope.dateChosen = false;
+        $scope.booking = true;
+        $scope.booked = false;
+        $scope.bookingFailed = false;
         
-        var loggedIn = $cookies.get("loggedIn") == "true";
-        var enoughData = $cookies.get("enoughData") == "true";
+        var loggedIn = $cookies.get("loggedIn") === "true";
+        var enoughData = $cookies.get("enoughData") === "true";
 
         function calculateCost() {
             console.log("Calculating cost");
@@ -29,6 +32,7 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
         
         var success = function(response) {
             $scope.house = response.data;
+            $scope.allowedToComment = $scope.house.allowedToComment;
             console.log($scope.house.dateFrom);
             //$scope.house.dateFrom = new Date($scope.house.dateFrom);
             $scope.currentIndex = 0;
@@ -109,34 +113,23 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
                     lng: $scope.house.longitude
                 }
             });
-        }
+        };
 
         
         if (loggedIn && !enoughData) {
-            $http({
-                url: SERVER_URL + "/houe/gethouse/" + $scope.houseId,
-                method: "POST",
-                data: $cookies.get("token"),
-                headers: {
-                    "Content-Type": "text/plain"
-                }
-            }).then(/* success */ success,
-                    /* failure */ function(response) {
-                
-            });
+            HttpCall.post("house/gethouse/" + $scope.houseId, $cookies.get("token"), success, generalFailure);
         } else {
-            $http({
-                url: SERVER_URL + "/house/gethouse/" + $scope.houseId,
-                method: "GET"
-            }).then( /* success */ success,
-                    /* failure */ function (response) {
-
-            });
+            HttpCall.get("house/gethouse/" + $scope.houseId, success, generalFailure);
         }
 
         $scope.book = function () {
             if ($scope.house.minCost > $scope.finalCost) {
                 console.log("Didn't reach minimum cost");
+            }
+
+            if (dateTo - dateFrom < $scope.house.minDays) {
+                $scope.bookingProblem = true;
+                $scope.problemText = "The owner requires bookings at least " + $scope.house.minDays + " days long";
             }
 
             var data = {
@@ -147,32 +140,36 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
                 dateTo: $scope.bookDateTo.yyyymmdd()
             };
 
-            $http({
-                url: SERVER_URL + "/booking/new",
-                method: "POST",
-                data: data,
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then( /* success */ function (response) {
+            $scope.bookingProblem = false;
+
+            $scope.booking = false;
+            var bookingSuccess = function(response) {
                 if (response.data.hasOwnProperty("status")) {
                     switch (parseInt(response.data.status)) {
                         case STATUS_BAD_DATE_RANGE:
                             console.log("Bad date range");
+                            $scope.bookingProblem = true;
+                            $scope.problemText = "Bad date range";
                             break;
                         case STATUS_DATE_BOOKED:
                             console.log("Someone booked it before you did");
+                            $scope.problemText = "Someone has already booked this house within the specified dates";
                             break;
                         case STATUS_DATE_OOB:
                             console.log("This should never happen");
-                            break;
                     }
                 } else {
                     console.log("House booked successfully");
+                    $scope.booked = true;
                 }
-            }, /* failure */ function (response) {
+            };
+
+            var bookingFailure = function(response) {
+                $scope.bookingFailed = true;
                 console.log(response);
-            });
+            };
+
+            HttpCall.postJson("booking/new", data, bookingSuccess, bookingFailure);
         };
 
         $scope.more = function () {
@@ -184,14 +181,12 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
         };
 
         $scope.getComments = function () {
-            $http({
-                url: SERVER_URL + "/comment/get/" + $scope.houseId,
-                method: "GET"
-            }).then( /* success */ function (response) {
-                $scope.comments = response.data;
-            }, /* failure */ function (response) {
-                $scope.comments = ["Failed loading comments"];
-            });
+            HttpCall.get("comment/get/" + $scope.houseId,
+                function(response) {
+                    $scope.comments = response.data;
+                }, function(response) {
+                    $scope.comments = ["Failed to load comments"];
+                });
         };
 
         $scope.getComments();
@@ -206,23 +201,20 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
                 rating: $scope.userRating
             };
 
-            $http({
-                url: SERVER_URL + "/comment/new/" + $scope.houseId,
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: data
-            }).then( /* success */ function (response) {
-                console.log("All Good!");
+            var newCommentSuccess = function(response) {
                 $scope.userComment = "";
                 $scope.getComments();
-            }, /* failure */ function (response) {
-                if (response.status == 404)
+                $scope.emptyComm();
+            };
+
+            var newCommentFailure = function(response) {
+                if (response.status === 404)
                     window.alert("Server not running");
-                else if (response.status == 401)
+                else if (response.status === 401)
                     $location.path("/login");
-            });
+            };
+
+            HttpCall.postJson("comment/new/" + $scope.houseId, data, newCommentSuccess, newCommentFailure);
         };
 
         $scope.emptyComm = function () {
@@ -230,8 +222,15 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
         };
 
         $scope.goToProfile = function () {
+            console.log("userid = " + $scope.house.ownerId);
             $location.path("/profilepage").search({
                 userId: $scope.house.ownerId
+            });
+        };
+
+        $scope.goToProfileIndexed = function(index) {
+            $location.path("/profilepage").search({
+                userId: $scope.comments[index].userId
             });
         };
 

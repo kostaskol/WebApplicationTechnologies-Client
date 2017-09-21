@@ -1,34 +1,23 @@
 var app = angular.module('airbnbApp');
 
-app.controller('adminCtrl', ['$scope', '$http', '$cookies',
-	function ($scope, $http, $cookies) {
-        console.log("Emitting showNav!");
+app.controller('adminCtrl', ['$scope', '$http', '$cookies', 'HttpCall',
+	function ($scope, $http, $cookies, HttpCall) {
         $scope.exportBtnText = "Export to XML";
         $scope.$broadcast('showNav', {
             showNav: false
         });
         
-        var failureFunc = function(response) {
-            if (response.status == 401) {
-                $scope.loggedIn = false;
-                $cookies.put(token, null);
-            }
-        };
-        
         var token = $cookies.get('token');
-        console.log("TOken = " + token);
-        if (token != null && token != "") {
-            $http({
-                url: "http://localhost:8080/airbnb/rest/admin/verifytoken",
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain"
-                },
-                data: $cookies.get('token')
-            }).then(/* success */ function(response) {
+        if (token !== null && token !== "") {
+            var verifySuccess = function(response) {
                 $scope.loggedIn = true;
-            }, /* failure */ failureFunc);
-            $scope.loggedIn = true;
+            };
+            
+            var verifyFailure = function(response) {
+                alert("Wrong credentials");
+            };
+
+            HttpCall.post("admin/verifytoken", $cookies.get("token"), "text/plain", verifySuccess, verifyFailure);
         } else {
             $scope.loggedIn = false;
         }
@@ -38,68 +27,58 @@ app.controller('adminCtrl', ['$scope', '$http', '$cookies',
         };
         
         $scope.login = function () {
-            var cred = {
-                "email": $scope.username,
+            var data = {
+                "mail": $scope.username,
                 "passwd": $scope.password
             };
 
-            $http({
-                url: "http://localhost:8080/airbnb/rest/user/login",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: cred
-            }).then( /* success */ function (response) {
+            var loginSuccess = function(response) {
                 $scope.loggedIn = true;
-                $cookies.put("token", response.data.token);
-            }, /* failure */ failureFunc);
+                $cookies.put("token", response.data);
+                console.log("Got response: " + response.data);
+            };
+
+            HttpCall.post("admin/login", data, "application/json", loginSuccess, generalFailure);
         };
 
         $scope.export = function () {
             $scope.exportBtnText = "Please wait...";
-            $http({
-                url: "http://localhost:8080/airbnb/rest/admin/rawexport",
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain"
-                },
-                data: $cookies.get('token')
-            }).then( /* success */ function (response) {
-                console.log("Response.data = " + response.data);
+            var exportSuccess = function(response) {    
+                /*
+                    The export request creates the XML file for export and sends
+                    a token that is valid for N TODO: Change this! seconds.
+                    The client then sends a GET request with that token as a query parameter
+                    and downloads the file through the browser
+                 */
+
                 var url = SERVER_URL + "/admin/getxml?t=" + response.data;
                 window.open(url, "_blank");
                 window.focus();
                 $scope.showUsers = false;
                 $scope.exportBtnText = "Export to XML";
-            }, /* failure */ failureFunc);
+            };
+            
+            
+            var exportFailure = function(response) {
+                $scope.exportBtnText = "Export to XML";
+                console.log("Got failure response: " + JSON.stringify(response));
+            }
+            HttpCall.postText("admin/rawexport", $cookies.get("token"), exportSuccess, exportFailure);
         };
 
         $scope.getApproval = function() {
-            $http({
-                url: "http://localhost:8080/airbnb/rest/admin/getapprovelist",
-                method: "POST",
-                data: $cookies.get('token'),
-                headers: {
-                    "Content-Type": "text/plain"
-                }
-            }).then(/* success */ function(response) {
+            HttpCall.postText("admin/getapprovelist", token, function(response) {
                 $scope.users = response.data;
-            }, /* failure */ failureFunc); 
+            }, generalFailure);
         };
 
         $scope.getUsers = function () {
-            $http({
-                url: "http://localhost:8080/airbnb/rest/admin/getusers",
-                method: "POST",
-                data: $cookies.get("token"),
-                headers: {
-                    "Content-Type": "text/plain"
-                }
-            }).then( /* success */ function (response) {
+            var getUsersSucess = function(response) {
                 $scope.users = response.data;
                 console.log($scope.users);
                 $scope.showUsers = true;
-            }, /* failure */ failureFunc);
+            };
+
+            HttpCall.postText("admin/getusers", token, getUsersSucess, generalFailure);
         };
 }]);

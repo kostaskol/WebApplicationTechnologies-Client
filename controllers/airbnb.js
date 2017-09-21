@@ -4,148 +4,58 @@ var app = angular.module("airbnbApp", [
     'ngAnimate',
     'ngCookies',
     'ngRateIt',
-    'angular.filter'
+    'angular.filter',
+    'ngFileUpload'
 ]);
 
-var user;
-
-var port = 8080;
-
-app.controller('airbnbController', ['$scope', '$rootScope', '$http', '$cookies',
-    function ($scope, $rootScope, $http, $cookies) {
+app.controller('airbnbController', ['$scope', '$rootScope', '$http', '$cookies', 'HttpCall',
+    function ($scope, $rootScope, $http, $cookies, HttpCall) {
 
         $rootScope.$on('UpdateNavBar', function () {
             $scope.updateNavBar();
         });
 
-        console.log('airbnbcontroller called');
         $scope.showNav = true;
 
         $scope.updateNavBar = function () {
             $scope.token = $cookies.get('token');
-            if ($scope.token === "" || $scope.token == null) {
+            if ($scope.token === "" || $scope.token === null) {
                 $scope.loggedIn = false;
+                $cookies.put("loggedIn", "false");
                 $scope.renter = false;
             } else {
-
-                // Request user information
-                $http({
-                    url: "http://localhost:8080/airbnb/rest/user/getuser",
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    data: {
-                        "token": $scope.token
-                    }
-                }).then( /* success */ function (response) {
+                var updateSuccess = function(response) {
                     $scope.loggedIn = true;
                     $scope.user = response.data;
-                    if ($scope.user.accType.charAt(1) == '1') {
+                    if ($scope.user.accType.charAt(1) === '1') {
                         $scope.renter = true;
                     }
-                    
-                    $cookies.put("enoughData", response.user.enoughData);
+                    $cookies.put("enoughData", $scope.user.enoughData);
+                };
 
-                }, function ( /* failure */ error) {
-                    // TODO: Remove this comment
-                    // For now, we manage a 404 (Server not running)
-                    // the same way. Need to change this and redirect them to
-                    // another page explaining the problem
-                    if (error.status == 401) {
-                        $scope.loggedIn = false;
-                        $cookies.put('token', '');
-                    }
-                });
+                var updateFailure = function(response) {
+                    $scope.loggedIn = false;
+                    $cookies.put('token', '');
+                    $cookies.put('loggedIn', "false");
+
+                };
+
+                HttpCall.postText("user/getuser", $scope.token, updateSuccess, updateFailure);
             }
         };
 
         $scope.$on('changeNav', function (obj) {
             $scope.showNav = obj.showNav;
-            console.log("Change Nav Called! " + obj.showNav);
         });
 
         $scope.signOut = function () {
-            $cookies.put('token', '');
-            user = null;
+            $cookies.put('token', null);
             $scope.updateNavBar();
         };
 
         $scope.updateNavBar();
     }
 ]);
-
-app.service('authenticationService', function ($http, $location) {
-    this.login = function (cred, succCb, failCb) {
-        $http({
-            url: "http://localhost:" + port + "/airbnb/rest/user/login",
-            method: "POST",
-            data: cred,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(succCb, failCb);
-    };
-
-    this.signup = function (info) {
-        $http({
-            url: "http://localhost:" + port + "/airbnb/rest/user/signup",
-            method: "POST",
-            data: info,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then( /* success */ function (data) {
-            var responseObject = data['data'];
-            if (responseObject['err-code'] == 200) {
-                console.log("Showing error");
-                $('#mail-err').removeClass("error-hidden");
-                $('#mail-err').addClass("error");
-            } else {
-                $('#mail-err').removeClass("error");
-                $('#mail-err').addClass("error-hidden");
-                window.history.back();
-            }
-        }, /* failure */ function (data) {
-            console.log("Got failure data: " + JSON.stringify(data) + " which is of type: " + typeof data);
-        });
-    };
-});
-
-app.service('fileUploadService', ['$http', function ($http) {
-    this.uploadFileToUrl = function (data, uploadUrl) {
-        $http.post(uploadUrl, fd, {
-                transformRequest: angular.identity,
-                headers: {
-                    'Content-Type': "multipart/form-data",
-                },
-                data: data
-            })
-            .then( /* success */ function (data) {
-                console.log(data);
-            }, /* failure */ function (data) {
-                console.log(data);
-            });
-    };
-}]);
-
-app.service('searchResultsService', ['$http', '$rootScope', function ($http, $rootScope) {
-    this.search = function (queryParams) {
-        $http({
-            url: "http://localhost:" + port + "/airbnb/rest/house/search",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: queryParams
-        }).then( /* success */ function (response) {
-            this.houses = response.data;
-            $rootScope.$broadcast('gotList', null);
-        }, /* failure */ function (response) {
-            this.houses = null;
-        });
-    }
-}])
 
 // Inject the dependency and create a url - file mapping
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -224,7 +134,3 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
             redirectTo: "/404"
         });
 }]);
-
-
-
-var req;

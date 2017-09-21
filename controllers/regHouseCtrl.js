@@ -253,7 +253,6 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
                     "costPerDay": $scope.costPerDay
                 };
                 fd.append('data', JSON.stringify(object));
-                console.log(JSON.stringify(object));
 
                 $http({
                     url: 'http://localhost:' + port + "/airbnb/rest/house/register",

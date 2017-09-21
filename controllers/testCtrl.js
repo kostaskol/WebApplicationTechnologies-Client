@@ -38,7 +38,6 @@ app.controller("testCtrl", ['$scope', '$http', function($scope, $http) {
     };
     
     
-    
 //    var parseableDate;
 //    var date = new Date();
 //    parseableDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() +

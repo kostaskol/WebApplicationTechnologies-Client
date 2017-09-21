@@ -36,43 +36,46 @@ function formChecker(jsonObject) {
     }
 
     this.checkPasswd = function () {
-//        if (this.passwd.length < 6)
-//            return tooShort;
-//
-//        if (this.passwd.length > 30)
-//            return tooLong;
-//
-//        if (this.passwd.search(/\d/) == -1)
-//            return noDigit;
-//
-//        if (this.passwd.search(/[a-zA-z]/) == -1)
-//            return noChar;
+       if (this.passwd.length < 6)
+           return tooShort;
+
+       if (this.passwd.length > 30)
+           return tooLong;
+
+       if (this.passwd.search(/\d/) == -1)
+           return noDigit;
+
+       if (this.passwd.search(/[a-zA-z]/) == -1)
+           return noChar;
 
         return allGood;
-    }
+    };
 
     this.checkEmpty = function () {
         return !(this.mail == null || this.passwd == null ||
             this.rePasswd == null ||
             this.fName == null || this.lName == null || this.cCode == null ||
             this.pNum == null || this.dob == null)
-    }
+    };
 
     this.checkNum = function () {
         return /\d*/.test(this.pNum) && /\d*/.test(this.cCode);
-    }
+    };
 
 }
 
-app.controller("signUpCtrl", ['$scope', '$http', '$location', 'authenticationService', function ($scope, $http, $location, authenticationService) {
-    // TODO: Remove this (obviously)
-    $scope.mail = "kwstaskolivas@gmail.com";
-    $scope.passwd = "49178417a";
-    $scope.rePasswd = "49178417a";
-    $scope.fName = "kostas";
-    $scope.lName = "kolivas";
-    $scope.cCode = "30";
-    $scope.pNum = "6948759487";
+app.controller("signUpCtrl", ['$scope', '$http', '$location', 'HttpCall', function ($scope, $http, $location, authenticationService) {
+
+    $scope.initialiseDate = function() {
+        $("#datepicker").datepicker({
+            language: 'en',
+            onSelect: function(formattedDate, selected, event) {
+                $scope.$apply(function() {
+                    $scope.dateOfBirth = formattedDate;
+                });
+            }
+        });
+    };
 
     $scope.signUp = function () {
         var cont = true;
@@ -133,7 +136,7 @@ app.controller("signUpCtrl", ['$scope', '$http', '$location', 'authenticationSer
             cont = false;
         } else {
             $scope.rePassErr = false;
-6948759487        }
+        }
 
         if (!cont) return;
 
@@ -146,16 +149,51 @@ app.controller("signUpCtrl", ['$scope', '$http', '$location', 'authenticationSer
         }
 
 
-        var request = {
+        var data = {
             "email": $scope.mail.toLowerCase(),
             "passwd": $scope.passwd,
             "accountType": accType,
             "firstName": $scope.fName,
             "lastName": $scope.lName,
             "phoneNumber": $scope.cCode + "-" + $scope.pNum,
+            "country": $scope.country,
             "dateOfBirth": $scope.dateOfBirth.yyyymmdd()
         };
 
-        authenticationService.signup(request);
+        var headers = {
+             "Content-Type": "application/json"
+        };
+
+        var success = function() {
+            var responseObject = data['data'];
+            if (responseObject['err-code'] == 200) {
+                console.log("Showing error");
+                $('#mail-err').removeClass("error-hidden");
+                $('#mail-err').addClass("error");
+            } else {
+                $('#mail-err').removeClass("error");
+                $('#mail-err').addClass("error-hidden");
+                var msg = "You have successfully signed up";
+                if (data.accountType.charAt(RENTER_OFFS) === '1') {
+                    msg += ". Your request to put houses up for renting will be reviewed by an administration promptly."
+                }
+
+                swal(
+                    'Successfully signed up',
+                    msg,
+                    'success'
+                );
+
+                window.history.back();
+            }
+
+
+        };
+
+        var failure = function() {
+            console.log("Got failure data: " + JSON.stringify(data));
+        };
+        HttpCall.call(SERVER_URL + "/user/signup", "POST", data, headers, success, failure);
+
     }
-}])
+}]);

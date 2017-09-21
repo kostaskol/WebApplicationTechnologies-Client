@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('messageCtrl', ['$scope', '$http', '$cookies', '$routeParams', '$timeout', '$location',
-    function($scope, $http, $cookies, $routeParams, $timeout, $location) {
+app.controller('messageCtrl', ['$scope', 'HttpCall', '$cookies', '$routeParams', '$timeout', '$location',
+    function($scope, HttpCall, $cookies, $routeParams, $timeout, $location) {
         $scope.messageSent = false;
         $scope.message = "";
         $scope.subject = "";
@@ -13,35 +13,32 @@ app.controller('messageCtrl', ['$scope', '$http', '$cookies', '$routeParams', '$
             console.log("Passed empty check");
 
             var token = $cookies.get("token");
-            if (token == null || token == "") {
+            if (token === null || token === "") {
                 $location.path("/login");
             }
+
             var data = {
                 token: $cookies.get('token'),
                 subject: $scope.subject,
                 message: $scope.message
-            }
+            };
 
             console.log("Sending: " + JSON.stringify(data));
-            $http({
-                url: SERVER_URL + "/message/send/" + $routeParams.userId,
-                method: "POST",
-                data: data
-            }).then( /* success */ function(response) {
+            var success = function(response) {
                 $timeout(function() {
                     window.history.back();
                 }, 3000);
                 $scope.messageSent = true;
                 $scope.statusMessage = "Your message was successfully sent";
-            }, /* failure */ function(response) {
-                console.log(response);
+            };
+
+            var failure = function(response) {
                 $scope.messageSent = true;
                 $scope.statusMessage = "There has been a problem sending your message. Please try again later";
-                // $timeout(function() {
-                //     window.history.back();
-                // }, 3000);
-            })
+            };
 
+
+            HttpCall.postJson("message/send/" + $routeParams.userId, data, success, failure);
         }
     }
 ]);

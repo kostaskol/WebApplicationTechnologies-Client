@@ -2,21 +2,28 @@
 	<table style="margin: auto;">
 		<tr>
 			<td colspan="2">
-				<img style="width: 350px; height: 350px" ng-src="{{ user.profilePicture }}" />
+				<img style="width: 250px; height: 2500px; max-width: 250px; max-height: 250px" ng-src="data:image/jpeg;base64,{{ user.picture }}" />
 			</td>
 		</tr>
 		<tr style="text-align: center">
 			<td colspan="2">
-				<p>{{ user.fName }} {{ user.lName }} </p>
+				<p>{{ user.firstName }} {{ user.lastName }} </p>
 			</td>
 		</tr>
 		<tr style="text-align: center">
 			<td colspan="2">
-				<p>{{ user.description }}</p>
+				<p ng-if="user.bio">{{ user.bio }}</p>
+                <p ng-if="!user.bio">This user has not shared their bio</p>
 
 			</td>
 		</tr>
 		<tr style="text-align: center">
+			<td colspan="2">
+				<p ng-if="user.country">{{ user.country }}</p>
+                <p ng-if="!user.country">This user has not shared their country of residence</p>
+			</td>
+		</tr>
+		<tr ng-if="loggedIn" style="text-align: center">
 			<td colspan="2">
 				<a style="cursor: pointer" ng-click="message()">Message them</a>
 

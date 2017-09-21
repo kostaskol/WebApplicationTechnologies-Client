@@ -1,1 +1,12 @@
-  
+.signup-form {
+    text-align: center;
+}
+
+.signup-form .ccode {
+    width: 25%;
+    display: inline-block;
+}
+
+.signup-form .form-input {
+    display: inline-block;
+}

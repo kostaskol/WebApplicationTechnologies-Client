@@ -27,7 +27,7 @@
 
 .nav>li>a:hover,
 .nav>li>a:focus {
-    background-color: #8c208a;
+    background-color: rgba(208, 211, 216, 0.5);
 }
 
 

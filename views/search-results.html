@@ -1,4 +1,4 @@
-<h2 style="text-align: center">Results: </h2>
-<house-list ng-if="none == false" houses="houses"></house-list>
-<pagination ng-if="none == false" click="changePage" pages="pages"></pagination>
-<h2 style="text-align: center" ng-if="none == true">No houses match your query</h2>
+<h2 ng-if="!none" style="text-align: center">Results: </h2>
+<house-list ng-if="!none" houses="houses"></house-list>
+<pagination ng-if="!none" click="changePage" pages="pages"></pagination>
+<h2 style="text-align: center" ng-if="none">Your search returned no results.</h2>

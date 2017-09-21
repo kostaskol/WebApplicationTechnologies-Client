@@ -31,7 +31,6 @@ app.controller('findHouseCtrl', ['$scope', '$http', 'searchResultsService', '$lo
         };
 
         $scope.more = function(i) {
-            console.log("Called with " + i);
             switch (i) {
                 case 0:
                     $scope.numBeds++;

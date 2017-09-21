@@ -1,20 +1,17 @@
 var app = angular.module('airbnbApp');
 
-app.controller("houseEditCtrl", ['$scope', '$routeParams', '$http', '$cookies', function ($scope, $routeParams, $http, $cookies) {
+app.controller("houseEditCtrl", ['$scope', '$routeParams', 'HttpCall', '$cookies',
+    function ($scope, $routeParams, HttpCall, $cookies) {
     $scope.houseId = $routeParams.houseId;
     $scope.page = 7;
     $scope.marker = null;
 
-    $http({
-        url: SERVER_URL + "/house/gethouse/" + $scope.houseId,
-        method: "GET"
-    }).then( /* success */ function (response) {
+    var getSuccess = function(response) {
         $scope.house = response.data;
         $scope.initMap();
-        $("#datepicker").val($scope.house.dateFrom + " - " + $scope.house.dateTo);
-    }, /* failure */ function (response) {
+    };
 
-    });
+    HttpCall.get("house/gethouse/" + $scope.houseId, getSuccess, generalFailure);
 
     $scope.initDatepicker = function () {
         $("#datepicker").datepicker({
@@ -86,11 +83,8 @@ app.controller("houseEditCtrl", ['$scope', '$routeParams', '$http', '$cookies', 
     };
 
     $scope.mapBtn = function () {
-        console.log("Called");
-        console.log($scope.useMap);
         $scope.useMap = true;
         $scope.useAddr = false;
-        console.log($scope.useMap);
         if (!$scope.initd) {
             initMap({
                 lat: $scope.house.latitude,
@@ -154,23 +148,17 @@ app.controller("houseEditCtrl", ['$scope', '$routeParams', '$http', '$cookies', 
 
     $scope.force = 0;
     $scope.next = function () {
-        if ($scope.page == 8) {
+        if ($scope.page === 8) {
             var data = {
                 token: $cookies.get("token"),
                 house: $scope.house
             };
-            $http({
-                url: SERVER_URL + "/house/updatehouse/" + $scope.houseId,
-                method: 'POST',
-                headers: {
-                    'Content-Type': "application/json"
+
+            HttpCall.postJson("house/updatehouse/" + $scope.houseId, data,
+                function(response) {
+                    window.back();
                 },
-                data: data
-            }).then( /* success */ function (data) {
-                console.log("Got response: " + JSON.stringify(data));
-            }, /* failure */ function (data) {
-                console.log("Got failure response: " + JSON.stringify(data));
-            });
+                function(response) {});
 
             var files = [];
             if ($scope.housePic1 != null) {
@@ -188,14 +176,11 @@ app.controller("houseEditCtrl", ['$scope', '$routeParams', '$http', '$cookies', 
                 var fd = new FormData();
                 fd.append('file', file);
                 fd.append('token', $cookies.get('token'));
-                $http({
-                    url: SERVER_URL + "/house/uploadphoto/" + $scope.houseId,
-                    method: "POST",
-                    headers: {
-                        "Content-Type": undefined
-                    },
-                    data: fd
-                });
+                var headers = {
+                    "Content-Type": undefined
+                };
+
+                HttpCall.call("house/uploadphoto/" + $scope.houseId, "POST", fd, headers, null, null);
             }
         } else {
             $scope.page++;

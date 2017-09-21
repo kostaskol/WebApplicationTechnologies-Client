@@ -5,7 +5,6 @@
             <tr>
                 <td style="width: 40%">
                     <div id="rating">
-                        <ng-rate-it ng-show="booking.house.numRatings !== 0" ng-model="booking.house.rating" read-only="true" style="display: inline-block"></ng-rate-it>
                         <span ng-show="booking.house.numRatings != 0" style="display: inline-block">({{ booking.house.numRatings }} Reviews)</span>
                         <p ng-show="booking.house.numRatings == 0">No reviews</p>
                     </div>

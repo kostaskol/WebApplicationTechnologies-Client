@@ -16,10 +16,10 @@
             </div>
         </nav>
     </div>
-    <table style="margin: auto">
+    <table style="margin: auto; width: 30%">
         <tr>
             <td>Owner: </td>
-            <td><a ng-click="goToProfile()" style="cursor: pointer">{{ house.ownerName }}</a></td>
+            <td><a ng-click="goToProfile()" href style="text-transform: capitalize">{{ house.ownerName }}</a></td>
         </tr>
         <tr>
             <td>House Address: </td>
@@ -143,7 +143,7 @@
             <td>Area: </td>
             <td>{{ house.area }}</td>
         </tr>
-        <tr>
+        <tr style="word-wrap: break-word">
             <td>Description: </td>
             <td>{{ house.description }}</td>
         </tr>
@@ -154,12 +154,6 @@
         <tr>
             <td>Minimum amount of days: </td>
             <td>{{ house.minDays }}</td>
-        </tr>
-        <tr ng-if="house.numRatings != 0">
-            <td>Rating: </td>
-            <td>
-                <ng-rate-it ng-model="house.rating" read-only="true"></ng-rate-it>
-            </td>
         </tr>
         <tr ng-if="house.numRatings == 0" style="text-align: left">;
             <td></td>
@@ -186,39 +180,63 @@
 
     <!-- Booking -->
     <div id="booking" ng-if="loggedIn">
-        <h3 style="text-align: center">Book this house now</h3>
-        <div style="margin: auto">
-            <table style="margin: auto; box-shadow: 10px 10px 5px grey; border: 2px solid; border-radius: 5%" ng-init="init()">
-                <tr>
-                    <td>
-                        <label>Date From: </label>
-                    </td>
-                    <td style="padding-bottom: 10px; padding-top: 10px; padding-right: 10px">
-                        <input ng-model="bookingDate" type="text" data-language="en" id="bookDate" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
+            <h3 style="text-align: center">Book this house now</h3>
+            <div style="margin: auto">
+                <table ng-if="booking" style="margin: auto; box-shadow: 10px 10px 5px grey; border: 2px solid;
+                border-radius: 5%" ng-init="init()">
+                    <tr>
+                        <td>
+                            <label>Date From: </label>
+                        </td>
+                        <td style="padding-bottom: 10px; padding-top: 10px; padding-right: 10px">
+                            <input ng-model="bookingDate" type="text" data-language="en" id="bookDate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
 
-                        <label>Guests: </label>
-                    </td>
-                    <td style="padding-bottom: 10px;">
-                        <quant-picker more-func="more" less-func="less" item="guests" num="0"></quant-picker>
+                            <label>Guests: </label>
+                        </td>
+                        <td style="padding-bottom: 10px;">
+                            <quant-picker more-func="more" less-func="less" item="guests" num="0"></quant-picker>
 
-                    </td>
-                </tr>
-                <tr ng-if="showCost">
-                    <td></td>
-                    <td style="padding-bottom: 10px;">
-                        {{ finalCost }}€
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="padding-left: 30%; padding-bottom: 20px">
-                        <button ng-click="book()" class="btn btn-primary">Book Now</button>
-                    </td>
-                </tr>
-            </table>
+                        </td>
+                    </tr>
+                    <tr ng-if="showCost">
+                        <td></td>
+                        <td style="padding-bottom: 10px;">
+                            {{ finalCost }}€
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left: 30%; padding-bottom: 20px">
+                            <button ng-click="book()" class="btn btn-primary">Book Now</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="bookingProblem">
+                        <td>
+                            {{ problemText }}
+                        </td>
+                    </tr>
+                </table>
+                <table ng-if="booked" style="margin: auto; box-shadow: 10px 10px 5px grey; border: 2px solid;
+                    border-radius: 5%">
+                    <tr>
+                        <td colspan="2" style="margin-right: 5px">
+                            The house has been successfully booked
+                        </td>
+                    </tr>
+                </table>
+                <table ng-if="bookingFailed" style="margin: auto; box-shadow: 10px 10px 5px grey; border: 2px solid;
+                    border-radius: 5%">
+                    <tr>
+                        <td colspan="2">
+                            There has been an error booking this apartment. Please try again later.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         </div>
     </div>
 
@@ -226,11 +244,10 @@
 
     <!-- User Comment -->
     <h3 style="text-align: center;">Comments</h3>
-    <table style="margin: auto; background-color: white">
+    <table ng-if="allowedToComment" style="margin: auto; background-color: white">
         <tr>
             <td>
                 <textarea cols="90" rows="4" style="resize: none" ng-model="userComment"></textarea>
-                <ng-rate-it style="text-align: right;" ng-model="userRating" resetable="false"></ng-rate-it>
             </td>
         </tr>
         <tr style="text-align: right">
@@ -244,8 +261,7 @@
 
     <!-- Comments -->
     <div id="comment-section" style="margin: auto; max-width: 30%" ng-repeat="comment in comments">
-        <p style="display: inline-block">{{ comment.userFName }} {{ comment.userLName }}</p>
-        <ng-rate-it ng-model="comment.rating" style="display: inline-block;" read-only="true" />
+        <a style="display: inline-block; text-transform: capitalize;" href ng-click="goToProfileIndexed($index)">{{ comment.userFName }} {{ comment.userLName }}</a>
         <p style="text-align: justify;">{{ comment.comment }}</p>
         <div class="hr-div"></div>
     </div>

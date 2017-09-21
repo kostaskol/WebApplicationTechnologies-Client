@@ -2,19 +2,20 @@
     .shown {
         display: block;
     }
-    
+
     .hide {
         display: none;
     }
 
 </style>
-<div style="">
+<div>
+    <!-- Vertical Navigation Bar -->
     <nav style="width: 10%; height: 100%; min-height: 100%; float: left; position: absolute; border-right: 3px solid;" class="my-profile">
         <ul class="nav">
-            <li><a href ng-click="showProfile()">Profile</a></li>
+            <li><a href ng-click="showProfile()">My Profile</a></li>
             <li>
                 <a href id="messages-btn" data-toggle="collapse" data-target="#message-sub" aria-expanded="false">
-                Messages
+                My Messages
                 <span style="float: right" class="glyphicon glyphicon-chevron-down"></span>
             </a>
             </li>
@@ -22,12 +23,12 @@
                 <li><a href ng-click="showMessages(0)">Inbox</a></li>
                 <li><a href ng-click="showMessages(1)">Sent</a></li>
             </ul>
-            <li ng-if="renter"><a href id="houses-btn" data-toggle="collapse" data-target="#houses-sub" aria-expanded="false">Houses<span style="float: right" class="glyphicon glyphicon-chevron-down"></span></a></li>
+            <li ng-if="renter"><a href id="houses-btn" data-toggle="collapse" data-target="#houses-sub" aria-expanded="false">My Houses<span style="float: right" class="glyphicon glyphicon-chevron-down"></span></a></li>
             <ul class="nav collapse" id="houses-sub" aria-labelledby="#houses-btn">
                 <li><a href ng-click="showHouses()">Edit houses</a></li>
                 <li><a href ng-click="uploadPhotos()">Upload more photos</a></li>
             </ul>
-            <li><a href id="bookings-btn" data-toggle="collapse" data-target="#bookings-sub" aria-expanded="false">Bookings<span style="float: right" class="glyphicon glyphicon-chevron-down"></span></a></li>
+            <li><a href id="bookings-btn" data-toggle="collapse" data-target="#bookings-sub" aria-expanded="false">My Bookings<span style="float: right" class="glyphicon glyphicon-chevron-down"></span></a></li>
             <ul class="nav collapse" id="bookings-sub" aria-labelledby="#bookings-btn">
                 <li><a href ng-click="showBooked(0)">Houses I have booked</a></li>
                 <li ng-if="renter"><a href ng-click="showBooked(1)">My booked houses</a></li>
@@ -36,18 +37,27 @@
 
         </ul>
     </nav>
+    <!-- Content (Based on navbar choice) -->
     <div id="content">
         <!-- Show user's profile -->
         <div ng-show="type == 'mp'">
             <h2 style="text-align: center">My profile</h2>
-            <img style="width: 200px; max-width: 200px; height: 200px; max-height: 200px; display: block; margin: auto" ng-src="data:image/jpg;base64,{{ user.picture }}" />
+            <div style="margin: auto; width: 200px; height: 200px">
+                <div>
+                    <img style="width: 200px; max-width: 200px; height: 200px; max-height: 200px; display: block; margin: auto;" ng-src="data:image/jpg;base64,{{ user.picture }}" />
+                </div>
+                <span ng-click="updateProfilePic()" style="float: right; cursor: pointer" class="glyphicon glyphicon-pencil"></span>
+                <!--<input id="newProfilePicture" onchange="angular.element(this).scope().fileSelected(this)" type="file" file-model="file" style="display: none">-->
+                <input type="file" style="display: none" ngf-select="fileSelected($files)" id="newProfilePicture">
+            </div>
+            <br>
             <p style="display: block; margin: auto; width: 100%; text-align: center; font-size: 25px; font-family: 'Times New Roman">{{ user.firstName }} {{ user.lastName }}</p>
             <p style="display: block; margin: auto; width: 100%; text-align: center; margin-top: 20px">
-                <span ng-if="user.approved" class="glyphicon glyphicon-ok"></span>
-                <span ng-if="!user.approved" class="glyphicon glyphicon-remove"></span> {{ approvedText }}
+                <span ng-if="renter && user.approved" class="glyphicon glyphicon-ok"></span>
+                <span ng-if="renter && !user.approved" class="glyphicon glyphicon-remove"></span> {{ approvedText }}
             </p>
-            <div style="margin: auto: width: 100%; text-align: center; margin-top: 20px">
-                <button style="margin: auto%; width: auto; text-align: center" class="btn btn-primary" ng-click="changeEmail()">Change Email</button>
+            <div style="margin: auto; width: 100%; text-align: center; margin-top: 20px">
+                <button style="margin: auto; width: auto; text-align: center" class="btn btn-primary" ng-click="changeEmail()">Change Email</button>
                 <form ng-show="showMail && !mailChanged" class="form-inline">
                     <div class="form-group" style="text-align: center; margin-top: 20px">
                         <label>New email: </label>
@@ -68,7 +78,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="pNum">Phone Number</label>
                         <div class="col-md-4">
-                            <input class="form-control" type="text" ng-model="user.pNum" ng-blur="updateUser(1)" />
+                            <input class="form-control" type="text" id="pNum" ng-model="user.pNum" ng-blur="updateUser(1)" />
                         </div>
 
                     </div>
@@ -122,19 +132,24 @@
             </div>
         </div>
         <div ng-if="type == 'bookings'">
-            <div ng-if="hasCurrent">
-                <h2 style="text-align: center">Currently Booked</h2>
-                <booking-list bookings="currentlyBooked"></booking-list>
+            <div ng-if="noBookings">
+                <h3 style="text-align: center">You have not booked any houses</h3>
             </div>
+            <div ng-if="!noBookings">
+                <div ng-if="hasCurrent">
+                    <h2 style="text-align: center">Currently Booked</h2>
+                    <booking-list bookings="currentlyBooked"></booking-list>
+                </div>
 
-            <div ng-if="hasPrevious">
-                <h2 style="text-align: center">Previously Booked</h2>
-                <booking-list bookings="previouslyBooked"></booking-list>
+                <div ng-if="hasPrevious">
+                    <h2 style="text-align: center">Previously Booked</h2>
+                    <booking-list bookings="previouslyBooked"></booking-list>
+                </div>
             </div>
         </div>
     </div>
     <div ng-if="type == 'sh'">
         <h2 style="text-align: center">My houses</h2>
-        <user-edit-list houses="usersHouses"></user-edit-list>
+        <house-edit-list houses="usersHouses" house-list-style="houseListStyle"></house-edit-list>
     </div>
 </div>

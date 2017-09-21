@@ -77,7 +77,7 @@ app.controller('searchResultsCtrl', ['$scope', '$rootScope', '$routeParams', '$h
                 console.log("Pages = " + $scope.pages);
             }
         }, /* failure */ function(response) {
-            window.alert("No results");
+            $scope.none = true;
         });
     }
 ]);

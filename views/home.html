@@ -1,11 +1,14 @@
-<div ng-id="loggedIn">
+<div ng-if="loggedIn">
     <h2 style="margin-top: 30px;" class="text-center">Recommended for you</h2>
-    <house-list house-list-style="houseListStyle" houses="predicted"></house-list>
+    <div ng-if="predicting" class="loader"></div>
+    <div ng-if="hasPredicted">
+        <house-list house-list-style="houseListStyle" houses="predicted"></house-list>
+    </div>
 </div>
 <h2 style="margin-top: 30px;" class="text-center">All houses</h2>
 <h4 style="text-align: center">Page: {{ currentPage }} / {{ numPages }}</h4>
 <div style="margin: auto; margin-bottom: 20px">
-    <pagination ng-show="loaded == true" pages="pages" click="getPage"></pagination>
+    <pagination ng-show="loaded" pages="pages" click="getPage"></pagination>
 </div>
 <house-list house-list-style="houseListStyle" ng-show="loaded == true" houses="houseInfo"></house-list>
 <div ng-show="loaded == false" class="loader"></div>
