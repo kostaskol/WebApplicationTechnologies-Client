@@ -10,7 +10,6 @@
                 <button class="btn btn-success" ng-click="mapBtn()">map</button>
                 <button class="btn btn-info" ng-click="addrBtn()">address</button>
             </div>
-
             <!-- By Address -->
             <form ng-show="useAddr === true" class="form-vertical max-width" style="margin-top: 40px;">
                 <div class="form-group">
@@ -24,51 +23,39 @@
                 </div>
             </form>
             <div ng-if="addrNotFound == true" style="display: block;">{{ errText }}</div>
-
             <!-- By Map -->
             <div ng-show="useMap === true" id="map"></div>
         </div>
-
         <!-- Various Numbers -->
         <div id="numbers" ng-show="page == 2">
             <h3 class="type-title">A little bit about the house</h3>
             <table style="border-spacing: 5em;">
                 <tr>
-                    <td style="width: 40%;">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(0)" src="../pics/minus.svg">
-                        <span ng-model="numBeds">{{ numBeds }}</span>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(0)" src="../pics/plus.png">
+                    <td style="width: 40%; text-align: center">
+                        <quant-picker more-func="more" less-func="less" item="numBeds" num="0"></quant-picker>
                     </td>
                     <td style="text-align: left">
                         <label style="display: inline-block">Number of beds</label>
                     </td>
                 </tr>
                 <tr style="padding-bottom: 10px">
-                    <td style="width: 7%;">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(1)" src="../pics/minus.svg">
-                        <span style="display: inline-block" ng-model="numBaths">{{ numBaths }}</span>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(1)" src="../pics/plus.png">
+                    <td style="width: 7%; text-align: center">
+                        <quant-picker more-func="more" less-func="less" item="numBaths" num="1"></quant-picker>
                     </td>
                     <td>
                         <label style="display: inline-block">Number of bathrooms</label>
                     </td>
                 </tr>
                 <tr style="padding-bottom: 10px">
-                    <td style="width: 7%">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(2)" src="../pics/minus.svg">
-                        <span style="display: inline-block" ng-model="accommodates">{{ accommodates }}</span>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(2)" src="../pics/plus.png">
+                    <td style="width: 7%; text-align: center">
+                        <quant-picker more-func="more" less-func="less" item="accommodates" num="2"
                     </td>
                     <td>
                         <label style="display: inline-block">Accommodates</label>
                     </td>
                 </tr>
             </table>
-
-
-
         </div>
-
         <!-- House rules -->
         <div ng-show="page == 3">
             <h3 style="text-align: center">House rules</h3>
@@ -106,9 +93,7 @@
                     </td>
                 </tr>
             </table>
-
         </div>
-
         <!-- Amenities -->
         <div ng-show="page == 4">
             <h3 style="text-align: center">Amenities</h3>
@@ -170,9 +155,7 @@
                     </td>
                 </tr>
             </table>
-
         </div>
-
         <!-- House info -->
         <div ng-show="page == 5">
             <h3 style="text-align: center">About the house</h3>
@@ -207,54 +190,56 @@
                 </tr>
             </table>
         </div>
-
         <!-- Available dates -->
         <div ng-show="page == 6">
             <h3 style="text-align: center">Dates</h3>
-
             <div class="center">
-                <label style="margin-right: 10px">Available from: </label><input type="date" ng-model="dateFrom">
-                <label> - To</label> <input type="date" my-date ng-model="dateTo">
+                <input type="text" id="datepicker" ng-init="initDate()">
                 <span class="error" style="margin-right: 50px; position: absolute" ng-if="errors.datesErr == true">{{ errors.datesErrText }}</span>
             </div>
             <table style="width: 30%; margin: 1em auto; text-align: center; margin-top: 50px">
                 <tr class="max-width; padding-top: 50px;">
                     <td style="width: 30%;">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(3)" src="../pics/minus.svg">
-                        <p style="display: inline-block" ng-model="minDays">{{ minDays }}</p>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(3)" src="../pics/plus.png">
+                        <quant-picker more-func="more" less-func="less" item="minDays" num="3"></quant-picker>
                     </td>
                     <td style="text-align: left; padding-top: 0px">
                         <label style="display: inline-block;">Minimum number of days</label>
                     </td>
                 </tr>
             </table>
-
         </div>
-
         <!-- Cost -->
-        <div ng-show="page == 7">
-            <div style="text-align: center">
+         <div ng-show="page == 7">
+            <div style="text-align: center;">
                 <h3>Cost</h3>
-                <table style="margin: 1em auto">
-                    <tr>
-                    <td>
-                        <label>Minimum cost</label>
-                    </td>
-                       <td>
-                           <input ng-model="minCost" type="number">
-                       </td>
+                <form class="form-horizontal" style="margin-left: 40%">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Minimum Cost: </label>
+                            <div class="col-md-2">
+                                <input class="form-control input-md" ng-model="minCost" type="number" />
+                            </div>
+                        </div>
 
-                    </tr>
-                </table>
-                <br>
-                <label>Cost per person: </label><input ng-model="costPerPerson" type="number">
-                <br>
-                <!-- TODO: Add verification -->
-                <label>Cost per day: </label><input ng-model="costPerDay" type="number">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost per person: </label>
+                            <div class="col-md-2">
+                                <input class="form-control input-md" ng-model="costPerPerson" type="number" />
+
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost per day: </label>
+                            <div class="col-md-2">
+                                <input class="form-control input-md" ng-model="costPerDay" type="number" />
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
             </div>
         </div>
-
         <div ng-show="page == 8">
             <h3 style="text-align: center">Picture</h3>
             <table style="margin: auto">
@@ -265,12 +250,9 @@
                 </tr>
             </table>
         </div>
-
         <div style="text-align: center" ng-show="page == 9">
             <h2>Successfully registered house</h2>
         </div>
-
-
     </div>
     <div ng-show="page != 9" style="text-align: center; min-height: 100px; max-height: 100px">
         <button id="next-btn" class="btn btn-primary" ng-click="next()">Next</button>

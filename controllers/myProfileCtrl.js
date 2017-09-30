@@ -66,6 +66,7 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', 
                 $scope.noMessages = true;
             } else {
                 $scope.messages = response.data;
+                console.log(JSON.stringify($scope.messages));
                 $scope.noMessages = false;
             }
             if (type == 0) {
@@ -116,20 +117,13 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', 
             cancelButtonText: "No, take me back"
         }, function (confirmed) {
             if (confirmed) {
-                $http({
-                    url: SERVER_URL + "/user/invalidate",
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "text/plain"
-                    },
-                    data: $cookies.get("token")
-                }).then( /* success */ function (response) {
-                    $cookies.remove("token");
+                var signOutSuccess = function(response) {
+                    $cookies.put("token", "");
                     $cookies.put("loggedIn", "false");
+                    $rootScope.$emit("UpdateNavBar", {});
                     $location.path("/home");
-                }, /* failure */ function (response) {
-
-                });
+                };
+                HttpCall.postText("user/invalidate", $cookies.get("token"), signOutSuccess, generalFailure);
             }
         });
 
@@ -161,7 +155,7 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', 
             $rootScope.$emit("UpdateNavBar", {});
         };
 
-        HttpCall.post("user/updateprofile", fd, undefined, uploadSuccess, generalFailure);
+        HttpCall.post("user/updateprofilepicture", fd, undefined, uploadSuccess, generalFailure);
     };
 
 
@@ -179,25 +173,16 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', 
                 closeOnConfirm: false
             },
             function (confirmed) {
-                console.log($scope.messages);
                 if (confirmed) {
-                    $http({
-                        url: SERVER_URL + "/message/delete/" + MESSAGE_RECEIVER + "/" + $scope.messages[index].messageId,
-                        method: "POST",
-                        data: $cookies.get("token"),
-                        headers: {
-                            "Content-Type": "text/plain"
-                        }
-                    }).then( /* success */ function (response) {
+                    var successFunction = function(response) {
                         $scope.messages.splice(index, 1);
                         swal({
                             title: "Success!",
                             text: "The message has been successfully deleted",
                             type: "success"
                         });
-                    }, /* failure */ function (response) {
-
-                    });
+                    };
+                    HttpCall.postText("message/delete", $cookies.get("token"), successFunction, generalFailure);
                 }
             });
     };
@@ -236,6 +221,18 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', 
     };
 
     $scope.showMessage(0);
+
+    $scope.reply = function(type, index) {
+        var userId;
+        if (type == 0) {
+            userId = $scope.messages[index].senderId;
+        } else {
+            userId = $scope.messages[index].receiverId;
+        }
+        $location.path("/message").search({
+            userId: userId
+        });
+    };
 
 
     $scope.showProfile = function () {

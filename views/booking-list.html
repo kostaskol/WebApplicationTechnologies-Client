@@ -1,24 +1,24 @@
-<div style="margin-left: 15%" class="row" ng-repeat="booking4 in bookings | chunkBy:4">
-    <div ng-click="presentHouse($parent.$index, $index)" class="col-lg-3" style="cursor: pointer" ng-repeat="booking in booking4">
-        <img style="width: 200px; height; 200px; min-width: 200px; min-height: 200px" ng-src="data:image/jpg;base64,{{booking.house.picture}}" />
-        <table style="margin: auto">
+<div id="booking-list" class="row low-margin-left" ng-repeat="booking4 in bookings | chunkBy:4">
+    <div ng-click="presentHouse($parent.$index, $index)" class="col-lg-3 pointer-cursor" ng-repeat="booking in booking4">
+        <img class="thumb" ng-src="data:image/jpg;base64,{{booking.house.picture}}" />
+        <table class="center-table-simple">
             <tr>
-                <td style="width: 40%">
+                <td class="md-width">
                     <div id="rating">
-                        <span ng-show="booking.house.numRatings != 0" style="display: inline-block">({{ booking.house.numRatings }} Reviews)</span>
+                        <span ng-show="booking.house.numRatings != 0" class="inline">({{ booking.house.numRatings }} Reviews)</span>
                         <p ng-show="booking.house.numRatings == 0">No reviews</p>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td style="width: 20%">
+                <td class="sm-width">
                     <div id="house-cost">
                         <span id="house-cost-text"><b>{{ booking.house.minCost }} €</b></span>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td style="width: 40%">
+                <td class="md-width">
                     <span id="house-city-country">{{ booking.house.city }}</span><span ng-if="house.city != null">,</span><span> {{ booking.house.country }}</span>
                 </td>
             </tr>

@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('findHouseCtrl', ['$scope', '$http', 'searchResultsService', '$location',
-    function($scope, $http, searchResultsService, $location) {
+app.controller('findHouseCtrl', ['$scope', 'searchResultsService', '$location',
+    function($scope, searchResultsService, $location) {
         $scope.numBeds =
             $scope.numBaths =
             $scope.accommodates =
@@ -132,8 +132,6 @@ app.controller('findHouseCtrl', ['$scope', '$http', 'searchResultsService', '$lo
             };
 
             $location.path("/searchresults").search(queryParams);
-
-
         };
     }
 ]);

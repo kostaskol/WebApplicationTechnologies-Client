@@ -1,14 +1,14 @@
-<div id="admin" style="text-align: center">
+<div id="admin" class="center-text">
     <div id="login-form" ng-show="loggedIn == false">
         <form class="form-horizontal">
             <div class="form-group">
                 <table class="center-table">
                     <tr>
-                        <td style="width: 30%">
+                        <td class="low-width">
                             <label class="control-label">Username: </label>
                         </td>
                         <td class="spaced-row">
-                            <input type="text" style="width: 100%" class="form-input form-control" ng-model="username" id="username" />
+                            <input type="text" class="full-width form-input form-control" ng-model="username" id="username" />
                         </td>
                     </tr>
                     <tr>
@@ -16,7 +16,7 @@
                             <label class="control-label">Password:  </label>
                         </td>
                         <td class="spaced-row">
-                            <input type="password" style="width: 100%" class="form-input form-control" ng-model="password" id="password" />
+                            <input type="password" class="full-width form-input form-control" ng-model="password" id="password" />
                         </td>
                     </tr>
                     <tr>
@@ -47,12 +47,8 @@
             </tr>
         </table>
         <div ng-if="showUsers && !showXml">
-            <h3 style="text-align: center">User List</h3>
+            <h3 class="center-text">User List</h3>
             <user-list users="users"></user-list>
-        </div>
-        <div ng-if="showXml && !showUsers">
-            <h3 style="text-align: center">XML</h3>
-            <textarea style="resize: none" ng-model="xmlString" cols="50" rows="30"></textarea>
         </div>
     </div>
 

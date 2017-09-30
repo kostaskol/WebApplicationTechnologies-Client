@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp')
 
-app.controller('searchResultsCtrl', ['$scope', '$rootScope', '$routeParams', '$http',
-    function($scope, $rootScope, $routeParams, $http) {
+app.controller('searchResultsCtrl', ['$scope', '$rootScope', '$routeParams', 'HttpCall',
+    function($scope, $rootScope, $routeParams, HttpCall) {
         console.log("Called");
 
         function copy(array) {
@@ -47,16 +47,8 @@ app.controller('searchResultsCtrl', ['$scope', '$rootScope', '$routeParams', '$h
             }
         };
 
-        $http({
-            url: "http://localhost:8080/airbnb/rest/house/search",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: $routeParams
-        }).then( /* success */ function(response) {
-            console.log("Got response");
-            if (response.data.length == 0) {
+        var success = function(response) {
+            if (response.data.length === 0) {
                 $scope.none = true;
             } else {
                 $scope.none = false;
@@ -76,8 +68,12 @@ app.controller('searchResultsCtrl', ['$scope', '$rootScope', '$routeParams', '$h
                 $scope.pages.push(">");
                 console.log("Pages = " + $scope.pages);
             }
-        }, /* failure */ function(response) {
+        };
+
+        var failure = function(response) {
             $scope.none = true;
-        });
+        };
+
+        HttpCall.postJson("house/search", $routeParams, success, failure);
     }
 ]);

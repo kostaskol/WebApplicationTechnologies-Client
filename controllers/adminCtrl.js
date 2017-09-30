@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('adminCtrl', ['$scope', '$http', '$cookies', 'HttpCall',
-	function ($scope, $http, $cookies, HttpCall) {
+app.controller('adminCtrl', ['$scope', '$cookies', 'HttpCall', '$location',
+	function ($scope, $cookies, HttpCall, $location) {
         $scope.exportBtnText = "Export to XML";
         $scope.$broadcast('showNav', {
             showNav: false
@@ -28,7 +28,7 @@ app.controller('adminCtrl', ['$scope', '$http', '$cookies', 'HttpCall',
         
         $scope.login = function () {
             var data = {
-                "mail": $scope.username,
+                "email": $scope.username,
                 "passwd": $scope.password
             };
 

@@ -14,9 +14,7 @@
             <table style="border-spacing: 5em;">
                 <tr>
                     <td style="width: 40%;">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(0)" src="../pics/minus.svg">
-                        <span ng-model="house.numBeds">{{ house.numBeds }}</span>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(0)" src="../pics/plus.png">
+                        <quant-picker more-func="more" less-func="less" item="house.numBeds" num="0"></quant-picker>
                     </td>
                     <td style="text-align: left">
                         <label style="display: inline-block">Number of beds</label>
@@ -24,9 +22,7 @@
                 </tr>
                 <tr style="padding-bottom: 10px">
                     <td style="width: 7%;">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(1)" src="../pics/minus.svg">
-                        <span style="display: inline-block" ng-model="house.numBaths">{{ house.numBaths }}</span>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(1)" src="../pics/plus.png">
+                        <quant-picker more-func="more" less-func="less" item="house.numBaths" num="1"></quant-picker>
                     </td>
                     <td>
                         <label style="display: inline-block">Number of bathrooms</label>
@@ -34,9 +30,12 @@
                 </tr>
                 <tr style="padding-bottom: 10px">
                     <td style="width: 7%">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(2)" src="../pics/minus.svg">
-                        <span style="display: inline-block" ng-model="house.accommodates">{{ house.accommodates }}</span>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(2)" src="../pics/plus.png">
+                        <quant-picker
+                                more-func="more"
+                                less-func="less"
+                                item="house.accommodates"
+                                num="2">
+                        </quant-picker>
                     </td>
                     <td>
                         <label style="display: inline-block">Accommodates</label>
@@ -180,7 +179,11 @@
                         <label>Getting there</label>
                     </td>
                     <td>
-                        <textarea style="resize: none" rows="5" cols="50" placeholder="Ex. 'How to get to the house from the closest city/airport/port'" ng-model="house.instructions"></textarea>
+                        <textarea style="resize: none"
+                                  rows="5"
+                                  cols="50"
+                                  placeholder="Ex. 'How to get to the house from the closest city/airport/port'"
+                                  ng-model="house.instructions"></textarea>
                     </td>
                 </tr>
             </table>
@@ -196,9 +199,12 @@
             <table style="width: 30%; margin: 1em auto; text-align: center; margin-top: 50px">
                 <tr class="max-width; padding-top: 50px;">
                     <td style="width: 30%;">
-                        <img style="width: 25%; display: inline-block; margin-right: 2px" ng-click="less(3)" src="../pics/minus.svg">
-                        <p style="display: inline-block" ng-model="house.minDays">{{ house.minDays }}</p>
-                        <img style="width: 25%; margin-left: 2px" ng-click="more(3)" src="../pics/plus.png">
+                        <quant-picker
+                            more-func="more"
+                            less-func="less"
+                            item="house.minDays"
+                            num="3">
+                        </quant-picker>
                     </td>
                     <td style="text-align: left; padding-top: 0px">
                         <label style="display: inline-block;">Minimum number of days</label>
@@ -215,14 +221,14 @@
                 <form class="form-horizontal" style="margin-left: 40%">
                     <fieldset>
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="textinput">Minimum Cost: </label>
+                            <label class="col-md-2 control-label">Minimum Cost: </label>
                             <div class="col-md-2">
                                 <input class="form-control input-md" ng-model="house.minCost" type="number" />
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="textinput">Cost per person: </label>
+                            <label class="col-md-2 control-label">Cost per person: </label>
                             <div class="col-md-2">
                                 <input class="form-control input-md" ng-model="house.costPerPerson" type="number" />
 

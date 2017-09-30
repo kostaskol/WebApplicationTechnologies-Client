@@ -21,5 +21,8 @@ var STATUS_NOT_MODIFIED = 400;
 var STATUS_NOT_ENOUGH_DATA = 255;
 
 var generalFailure = function(response) {
-    alert("Got failure response: " + JSON.stringify(response));
+    console.log("Got failure response: " + JSON.stringify(response));
+    if (response.status == 500) {
+        $location.path("/500");
+    }
 };

@@ -47,7 +47,6 @@
                     <img style="width: 200px; max-width: 200px; height: 200px; max-height: 200px; display: block; margin: auto;" ng-src="data:image/jpg;base64,{{ user.picture }}" />
                 </div>
                 <span ng-click="updateProfilePic()" style="float: right; cursor: pointer" class="glyphicon glyphicon-pencil"></span>
-                <!--<input id="newProfilePicture" onchange="angular.element(this).scope().fileSelected(this)" type="file" file-model="file" style="display: none">-->
                 <input type="file" style="display: none" ngf-select="fileSelected($files)" id="newProfilePicture">
             </div>
             <br>
@@ -102,7 +101,7 @@
                 </div>
                 <div id="{{$index}}-body" class="hide" style="text-align: center">
                     <p style="text-align: justify; text-align-last: center; margin-top: 10px">{{ message.message }}</p>
-                    <button class="btn" ng-click="reply($index)">Reply</button>
+                    <button class="btn" ng-click="reply(0, $index)">Reply</button>
                 </div>
 
                 <!-- Separator -->
@@ -124,7 +123,7 @@
                 </div>
                 <div id="{{$index}}-body" class="hide" style="text-align: center">
                     <p style="text-align: justify; text-align-last: center; margin-top: 10px">{{ message.message }}</p>
-                    <button class="btn" ng-click="reply($index)">Reply</button>
+                    <button class="btn" ng-click="reply(1, $index)">Reply</button>
                 </div>
 
                 <!-- Separator -->

@@ -10,3 +10,11 @@
 
 #login-form {
 }
+
+#admin .low-width {
+    width: 30%
+}
+
+#admin .full-width {
+    width: 100%
+}

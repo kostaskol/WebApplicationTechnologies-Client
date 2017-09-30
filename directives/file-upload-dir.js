@@ -1,5 +1,6 @@
 var app = angular.module('airbnbApp');
 
+// This directive was copied from somewhere on https://www.stackoverflow.com (can't remember the exact URL)
 app.directive('fileModel', ['$parse', function($parse) {
   return {
     restrict: 'A',

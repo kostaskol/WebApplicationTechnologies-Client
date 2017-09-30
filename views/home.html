@@ -1,6 +1,6 @@
 <div ng-if="loggedIn">
     <h2 style="margin-top: 30px;" class="text-center">Recommended for you</h2>
-    <div ng-if="predicting" class="loader"></div>
+    <div ng-show="predicting" class="loader"></div>
     <div ng-if="hasPredicted">
         <house-list house-list-style="houseListStyle" houses="predicted"></house-list>
     </div>

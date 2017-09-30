@@ -64,14 +64,14 @@ function formChecker(jsonObject) {
 
 }
 
-app.controller("signUpCtrl", ['$scope', '$http', '$location', 'HttpCall', function ($scope, $http, $location, authenticationService) {
+app.controller("signUpCtrl", ['$scope', '$location', 'HttpCall', function ($scope, $location, HttpCall) {
 
     $scope.initialiseDate = function() {
         $("#datepicker").datepicker({
             language: 'en',
             onSelect: function(formattedDate, selected, event) {
                 $scope.$apply(function() {
-                    $scope.dateOfBirth = formattedDate;
+                    $scope.dateOfBirth = new Date(formattedDate);
                 });
             }
         });
@@ -138,7 +138,7 @@ app.controller("signUpCtrl", ['$scope', '$http', '$location', 'HttpCall', functi
             $scope.rePassErr = false;
         }
 
-        if (!cont) return;
+        // if (!cont) return;
 
 
         var accType = "0";
@@ -160,12 +160,8 @@ app.controller("signUpCtrl", ['$scope', '$http', '$location', 'HttpCall', functi
             "dateOfBirth": $scope.dateOfBirth.yyyymmdd()
         };
 
-        var headers = {
-             "Content-Type": "application/json"
-        };
-
-        var success = function() {
-            var responseObject = data['data'];
+        var success = function(response) {
+            var responseObject = response.data;
             if (responseObject['err-code'] == 200) {
                 console.log("Showing error");
                 $('#mail-err').removeClass("error-hidden");
@@ -190,10 +186,9 @@ app.controller("signUpCtrl", ['$scope', '$http', '$location', 'HttpCall', functi
 
         };
 
-        var failure = function() {
-            console.log("Got failure data: " + JSON.stringify(data));
+        var failure = function(response) {
+            console.log("Got failure data: " + JSON.stringify(response.data));
         };
-        HttpCall.call(SERVER_URL + "/user/signup", "POST", data, headers, success, failure);
-
+        HttpCall.postJson("user/signup", data, success, failure);
     }
 }]);

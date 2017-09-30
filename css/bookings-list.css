@@ -1,0 +1,21 @@
+#booking-list {}
+#booking-list .low-margin-left {
+    margin-left: 15%
+}
+
+#booking-list .thumb {
+    width: 200px;
+    height: 200px;
+    max-width: 200px;
+    max-height: 200px;
+    min-width: 200px;
+    min-height: 200px;
+}
+
+#booking-list .md-width {
+    width: 40%;
+}
+
+#booking-list .sm-width {
+    width: 20%
+}

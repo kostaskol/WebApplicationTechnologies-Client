@@ -8,14 +8,14 @@ function Errors() {
     this.datesErrText = "";
 }
 
-app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$timeout', '$cookies',
-                                function ($scope, $http, $location, $rootScope, $timeout, $cookies) {
+app.controller('regHouseCtrl', ['$scope', 'HttpCall', '$location', '$rootScope', '$timeout', '$cookies',
+                                function ($scope, HttpCall, $location, $rootScope, $timeout, $cookies) {
         $scope.page = 1;
         $scope.marker = null;
         $scope.numBeds = 1;
         $scope.numBaths = 1;
         $scope.accommodates = 1;
-        $scope.minDays = 0;
+        $scope.minDays = "No minimum";
         $scope.maxPersons = 1;
         $scope.dateFrom = null;
         $scope.dateTo = null;
@@ -45,8 +45,10 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
                     }
                     break;
                 case 3:
-                    if ($scope.minDays > 0) {
+                    if ($scope.minDays > 1) {
                         $scope.minDays--;
+                    } else if ($scope.minDays === 1 || $scope.minDays === "No minimum") {
+                        $scope.minDays = "No minimum";
                     }
                     break;
                 case 4:
@@ -68,6 +70,9 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
                     $scope.accommodates++;
                     break;
                 case 3:
+                    if ($scope.minDays === "No minimum") {
+                        $scope.minDays = 0;
+                    }
                     $scope.minDays++;
                     break;
                 case 4:
@@ -77,11 +82,8 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
         };
 
         $scope.mapBtn = function () {
-            console.log("Called");
-            console.log($scope.useMap);
             $scope.useMap = true;
             $scope.useAddr = false;
-            console.log($scope.useMap);
             if (!$scope.initd) {
                 $scope.getLocation();
             } else {
@@ -90,14 +92,29 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
                 }, 500);
             }
         };
+                                    
+        $scope.initDate = function() {
+            $("#datepicker").datepicker({
+                language: 'en',
+                range: true,
+                minDate: new Date(),
+                multipleDatesSeparator: " - ",
+                onSelect: function (formattedDate, selected, event) {
+                    $scope.$apply(function () {
+                        var dates = formattedDate.split(" - ");
+                        if (dates.length === 2) {
+                            $scope.dateFrom = new Date(dates[0]).yyyymmdd();
+                            $scope.dateTo = new Date(dates[1]).yyyymmdd();
+                        }
+                    });
+
+                }
+            });
+        };
 
         $scope.addrBtn = function () {
             $scope.useAddr = true;
             $scope.useMap = false;
-        };
-
-        $scope.initDate = function () {
-            $('#datepicker').datepicker();
         };
 
         function initMap(position) {
@@ -221,6 +238,9 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
                 fd.append('file', file);
                 var tok = $cookies.get('token');
                 fd.append('token', tok);
+                if ($scope.minDays === "No minimum") {
+                    $scope.minDays = 0;
+                }
                 var object = {
                     "houseID": null,
                     "latitude": $scope.lat,
@@ -246,31 +266,31 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
                     "instructions": $scope.instructions,
                     "rating": 0,
                     "numRatings": 0,
-                    "dateFrom": $scope.dateFrom.yyyymmdd(),
-                    "dateTo": $scope.dateTo.yyyymmdd(),
+                    "dateFrom": $scope.dateFrom,
+                    "dateTo": $scope.dateTo,
                     "minCost": $scope.minCost,
                     "costPerPerson": $scope.costPerPerson,
                     "costPerDay": $scope.costPerDay
                 };
                 fd.append('data', JSON.stringify(object));
 
-                $http({
-                    url: 'http://localhost:' + port + "/airbnb/rest/house/register",
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': undefined
-                    },
-                    data: fd
-                }).then( /* success */ function (data) {
-                    console.log("Got response: " + JSON.stringify(data));
-                }, /* failure */ function (data) {
-                    console.log("Got failure response: " + JSON.stringify(data));
-                });
+                var success = function(response) {
+                    $timeout(function () {
+                        console.log("Running");
+                        $location.path("/home");
+                    }, 2000);
+                };
 
-                $timeout(function () {
-                    console.log("Running");
-                    $location.path("/home");
-                }, 2000);
+                var failure = function(response) {
+                    console.log("There has been an error");
+                };
+
+                var headers = {
+                    "Content-Type": undefined
+                };
+
+                HttpCall.call("house/register", "POST", fd, headers, success, failure);
+
             } else {
                 $scope.page++;
             }
@@ -282,7 +302,7 @@ app.controller('regHouseCtrl', ['$scope', '$http', '$location', '$rootScope', '$
             geocoder.geocode({
                 'address': $scope.address
             }, function (results, status) {
-                if (status == 'OK') {
+                if (status === 'OK') {
                     $scope.lat = results[0].geometry.location.lat();
                     $scope.lng = results[0].geometry.location.lng();
                     if ($scope.map === null) {

@@ -3,13 +3,12 @@ var app = angular.module("airbnbApp", [
     'ngRoute',
     'ngAnimate',
     'ngCookies',
-    'ngRateIt',
     'angular.filter',
     'ngFileUpload'
 ]);
 
-app.controller('airbnbController', ['$scope', '$rootScope', '$http', '$cookies', 'HttpCall',
-    function ($scope, $rootScope, $http, $cookies, HttpCall) {
+app.controller('airbnbController', ['$scope', '$rootScope', '$cookies', 'HttpCall',
+    function ($scope, $rootScope, $cookies, HttpCall) {
 
         $rootScope.$on('UpdateNavBar', function () {
             $scope.updateNavBar();
@@ -71,6 +70,9 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         .when('/404', {
             templateUrl: "views/404.html"
         })
+        .when('/500', {
+            templateUrl: "views/500.html"
+        })
         .when('/login', {
             templateUrl: "views/login.html",
             controller: "loginCtrl"
@@ -88,7 +90,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
             controller: "findHouseCtrl"
         })
         .when("/house-pres", {
-            templateUrl: "views/house-pres.html",
+            templateUrl: "views/house-presentation.html",
             controller: "housePresCtrl"
         })
         .when("/searchresults", {

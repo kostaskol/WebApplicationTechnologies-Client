@@ -1,13 +1,10 @@
 var app = angular.module('airbnbApp');
 
-app.controller('settingsCtrl', ['$scope', '$http', '$cookies',
-                                function ($scope, $http, $cookies) {
+app.controller('settingsCtrl', ['$scope', 'HttpCall', '$cookies',
+                                function ($scope, HttpCall, $cookies) {
         $scope.uploadFile = function () {
             if ($scope.myFile == null) {
-                console.log("It's null");
                 return;
-            } else {
-                console.log("It's not null");
             }
             var file = $scope.myFile;
             var fd = new FormData();

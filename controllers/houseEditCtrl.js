@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller("houseEditCtrl", ['$scope', '$routeParams', 'HttpCall', '$cookies',
-    function ($scope, $routeParams, HttpCall, $cookies) {
+app.controller("houseEditCtrl", ['$scope', '$routeParams', 'HttpCall', '$cookies', '$location',
+    function ($scope, $routeParams, HttpCall, $cookies, $location) {
     $scope.houseId = $routeParams.houseId;
     $scope.page = 7;
     $scope.marker = null;
@@ -18,6 +18,7 @@ app.controller("houseEditCtrl", ['$scope', '$routeParams', 'HttpCall', '$cookies
             language: 'en',
             range: true,
             minDate: new Date(),
+            multipleDatesSeparator: " - ",
             onSelect: function (formattedDate, selected, event) {
                 $scope.$apply(function () {
                     var dates = formattedDate.split(" - ");

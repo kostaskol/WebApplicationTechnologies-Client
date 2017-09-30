@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('homeCtrl', ['$scope', '$http', '$rootScope', '$location', '$cookies', '$window', 'HttpCall',
-    function ($scope, $http, $rootScope, $location, $cookies, $window, HttpCall) {
+app.controller('homeCtrl', ['$scope', '$rootScope', '$location', '$cookies', '$window', 'HttpCall',
+    function ($scope, $rootScope, $location, $cookies, $window, HttpCall) {
         $scope.houseListStyle = {
             "margin": "auto",
             "width": "90%"
@@ -17,7 +17,6 @@ app.controller('homeCtrl', ['$scope', '$http', '$rootScope', '$location', '$cook
         $scope.predicting = false;
 
         if ($cookies.get("token") !== null && $cookies.get("token") !== "") {
-
 
             var verifySuccess = function(response) {
                 $scope.loggedIn = true;

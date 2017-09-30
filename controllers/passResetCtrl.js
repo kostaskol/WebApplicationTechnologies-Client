@@ -14,6 +14,7 @@ app.controller('passResetCtrl', ['$scope', 'HttpCall', '$location',
         };
 
 
+
         var resetSuccess = function(response) {
             $location.path("/login")
         };

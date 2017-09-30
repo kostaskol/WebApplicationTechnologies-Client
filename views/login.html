@@ -15,6 +15,11 @@
             <input style="width: 120%" type="password" class="form-control form-input" ng-model="logPasswd" id="passwd" required />
         </td>
     </tr>
+    <tr ng-if="wrongCred">
+        <td colspan="2">
+            <span style="color: indianred">The username or password is incorrect.</span>
+        </td>
+    </tr>
     <tr>
         <td style="padding-left: 30px">
             <a ng-click="resetPass()" style="cursor: pointer;">Forgot password</a>

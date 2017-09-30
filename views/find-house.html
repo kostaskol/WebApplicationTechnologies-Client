@@ -1,24 +1,24 @@
 <div id="house-search" class="center-form">
-    <h3 style="text-align: center">Page {{ page + 1 }} / 7</h3>
+    <h3 class="center-text">Page {{ page + 1 }} / 7</h3>
     <!-- Location -->
     <div ng-show="page == 0">
-        <h3 style="text-align: center">Location</h3>
+        <h3 class="center-text">Location</h3>
         <form class="form-horizontal">
             <div class="form-group">
                 <label class="control-label col-sm-2">City: </label>
                 <div class="col-sm-10">
-                    <input type="text" style="width: 100%; margin-left: 10px" class="form-control form-input" ng-model="city" id="city" />
+                    <input type="text" class="form-control form-input city-inp" ng-model="city" id="city" />
                 </div>
-                <label class="control-label col-sm-2" style="margin-top: 20px;" for="country">Country: </label>
+                <label class="control-label col-sm-2" class="margin-top-30" for="country">Country: </label>
                 <div class="col-sm-10">
-                    <input type="text" style="width: 100%; margin-top: 30px; margin-left: 10px" class="form-control form-input" ng-model="country" id="country" />
+                    <input type="text" class="city-inp margin-top-30 form-control form-input" ng-model="country" id="country" />
                 </div>
             </div>
         </form>
     </div>
     <!-- Various Numbers -->
     <div ng-show="page == 1">
-        <h3 style="text-aling: center;">Numbers (TODO: Change this)</h3>
+        <h3 style="text-aling: center;">Numbers</h3>
         <table style="margin: auto">
             <tr class="spaced-row">
                 <td style="width: 40%;">

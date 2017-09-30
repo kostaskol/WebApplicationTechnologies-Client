@@ -2,29 +2,36 @@ var app = angular.module('airbnbApp');
 
 app.controller('loginCtrl', ['$scope', '$location', '$rootScope', '$cookies', 'HttpCall',
     function ($scope, $location, $rootScope, $cookies, HttpCall) {
-        $scope.logMail = "kwstaskolivas@gmail.com";
-        $scope.logPasswd = "4917847";
+        $scope.wrongCred = false;
         $scope.login = function () {
             var credentials = {
                 "email": $scope.logMail,
                 "passwd": $scope.logPasswd
             };
 
+            console.log("Sending credentials: " + JSON.stringify(credentials));
+
             var succCb = function (response) {
-                var data = response['data'];
-                console.log("Token: " + data.token);
-                $cookies.put('token', data.token, {
+                var token = response.data;
+                console.log("Token: " + token);
+                $cookies.put('token', token, {
                     path: "/"
                 });
                 $cookies.put("loggedIn", "true", {
                     path: "/"
                 });
-                console.log("$cookies.token = " + $cookies.get('token'));
                 $rootScope.$emit('UpdateNavBar', {});
                 window.history.back();
             };
 
-            HttpCall.postJson("user/login", credentials, succCb, generalFailure);
+            var failure = function(response) {
+                console.log("Failure response " + JSON.stringify(response.data));
+                if (response.status == 404) {
+                    $scope.wrongCred = true;
+                }
+            };
+
+            HttpCall.postJson("user/login", credentials, succCb, failure);
         };
         
         $scope.resetPass = function() {

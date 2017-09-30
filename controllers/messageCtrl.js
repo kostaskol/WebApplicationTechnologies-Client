@@ -23,7 +23,6 @@ app.controller('messageCtrl', ['$scope', 'HttpCall', '$cookies', '$routeParams',
                 message: $scope.message
             };
 
-            console.log("Sending: " + JSON.stringify(data));
             var success = function(response) {
                 $timeout(function() {
                     window.history.back();
