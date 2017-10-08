@@ -2,7 +2,7 @@
     .shown {
         display: block;
     }
-
+    
     .hide {
         display: none;
     }
@@ -130,6 +130,7 @@
                 <div style="border: solid 1px #e5e5e5; margin-top: 10px; margin-bottom: 15px"></div>
             </div>
         </div>
+        <!-- Show bookings -->
         <div ng-if="type == 'bookings'">
             <div ng-if="noBookings">
                 <h3 style="text-align: center">You have not booked any houses</h3>
@@ -137,7 +138,7 @@
             <div ng-if="!noBookings">
                 <div ng-if="hasCurrent">
                     <h2 style="text-align: center">Currently Booked</h2>
-                    <booking-list bookings="currentlyBooked"></booking-list>
+                    <booking-list house-list-style="houseListStyle" bookings="currentlyBooked"></booking-list>
                 </div>
 
                 <div ng-if="hasPrevious">
@@ -147,6 +148,7 @@
             </div>
         </div>
     </div>
+    <!-- Show houses -->
     <div ng-if="type == 'sh'">
         <h2 style="text-align: center">My houses</h2>
         <house-edit-list houses="usersHouses" house-list-style="houseListStyle"></house-edit-list>

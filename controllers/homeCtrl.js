@@ -70,6 +70,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$location', '$cookies', '$w
             $scope.predicting = true;
             var predSuccess = function(response) {
                 if (response.data.status === STATUS_NOT_ENOUGH_DATA) {
+		    console.log("Not enough data 2");
                     $scope.hasPredicted = false;
                     return;
                 }

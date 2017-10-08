@@ -1,4 +1,4 @@
-<div id="booking-list" class="row low-margin-left" ng-repeat="booking4 in bookings | chunkBy:4">
+<div id="booking-list" style="margin-left: 15%" class="row low-margin-left" ng-repeat="booking4 in bookings | chunkBy:4">
     <div ng-click="presentHouse($parent.$index, $index)" class="col-lg-3 pointer-cursor" ng-repeat="booking in booking4">
         <img class="thumb" ng-src="data:image/jpg;base64,{{booking.house.picture}}" />
         <table class="center-table-simple">

@@ -211,9 +211,9 @@ app.controller('myProfileCtrl', ['$scope', '$location', '$cookies', 'HttpCall', 
         var token = $cookies.get("token");
         var url;
         if (type === 0) {
-            url = "bookings/getusersbookings";
+            url = "booking/getusersbookings";
         } else {
-            url = "bookings/getrentersbookings";
+            url = "booking/getrentersbookings";
         }
 
         HttpCall.postText(url, token, getBookings, generalFailure);

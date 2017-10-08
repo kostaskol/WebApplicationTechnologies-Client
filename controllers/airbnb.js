@@ -18,6 +18,7 @@ app.controller('airbnbController', ['$scope', '$rootScope', '$cookies', 'HttpCal
 
         $scope.updateNavBar = function () {
             $scope.token = $cookies.get('token');
+            console.log("Updating navbar: token = " + $scope.token);
             if ($scope.token === "" || $scope.token === null) {
                 $scope.loggedIn = false;
                 $cookies.put("loggedIn", "false");

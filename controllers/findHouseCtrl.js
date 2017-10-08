@@ -1,7 +1,7 @@
 var app = angular.module('airbnbApp');
 
-app.controller('findHouseCtrl', ['$scope', 'searchResultsService', '$location',
-    function($scope, searchResultsService, $location) {
+app.controller('findHouseCtrl', ['$scope', '$location',
+    function($scope, $location) {
         $scope.numBeds =
             $scope.numBaths =
             $scope.accommodates =

@@ -30,7 +30,15 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
             }
         });
         
+        var filter = function(arr) {
+            var seen = {};
+            return arr.filter(function(item) {
+                return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+            });
+        };
+        
         var success = function(response) {
+            response.data.pictures = filter(response.data.pictures);
             $scope.house = response.data;
             $scope.allowedToComment = $scope.house.allowedToComment;
             console.log($scope.house.dateFrom);
@@ -51,8 +59,10 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
             console.log($scope.house.excludedDates);
 
             $scope.excludedDates = [];
-            for (var i = 0; i < $scope.house.excludedDates.length; i++) {
-                $scope.excludedDates.push(new Date($scope.house.excludedDates[i]));
+            if ($scope.house.excludedDates != null) {
+                for (var i = 0; i < $scope.house.excludedDates.length; i++) {
+                    $scope.excludedDates.push(new Date($scope.house.excludedDates[i]));
+                }
             }
 
             console.log($scope.excludedDates);
@@ -117,7 +127,8 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
 
         
         if (loggedIn && !enoughData) {
-            HttpCall.post("house/gethouse/" + $scope.houseId, $cookies.get("token"), success, generalFailure);
+            console.log("Not enough data");
+            HttpCall.postText("house/gethouse/" + $scope.houseId, $cookies.get("token"), success, generalFailure);
         } else {
             HttpCall.get("house/gethouse/" + $scope.houseId, success, generalFailure);
         }
@@ -127,7 +138,7 @@ app.controller('housePresCtrl', ['$scope', '$rootScope', '$routeParams', '$locat
                 console.log("Didn't reach minimum cost");
             }
 
-            if (dateTo - dateFrom < $scope.house.minDays) {
+            if ($scope.dateTo - $scope.dateFrom < $scope.house.minDays) {
                 $scope.bookingProblem = true;
                 $scope.problemText = "The owner requires bookings at least " + $scope.house.minDays + " days long";
             }

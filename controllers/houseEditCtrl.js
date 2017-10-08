@@ -3,7 +3,7 @@ var app = angular.module('airbnbApp');
 app.controller("houseEditCtrl", ['$scope', '$routeParams', 'HttpCall', '$cookies', '$location',
     function ($scope, $routeParams, HttpCall, $cookies, $location) {
     $scope.houseId = $routeParams.houseId;
-    $scope.page = 7;
+    $scope.page = 1;
     $scope.marker = null;
 
     var getSuccess = function(response) {
@@ -157,7 +157,7 @@ app.controller("houseEditCtrl", ['$scope', '$routeParams', 'HttpCall', '$cookies
 
             HttpCall.postJson("house/updatehouse/" + $scope.houseId, data,
                 function(response) {
-                    window.back();
+                    window.history.back();
                 },
                 function(response) {});
 

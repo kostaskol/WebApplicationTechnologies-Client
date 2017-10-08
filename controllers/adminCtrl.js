@@ -14,7 +14,7 @@ app.controller('adminCtrl', ['$scope', '$cookies', 'HttpCall', '$location',
             };
             
             var verifyFailure = function(response) {
-                alert("Wrong credentials");
+                $scope.loggedIn = false;
             };
 
             HttpCall.post("admin/verifytoken", $cookies.get("token"), "text/plain", verifySuccess, verifyFailure);
@@ -62,14 +62,8 @@ app.controller('adminCtrl', ['$scope', '$cookies', 'HttpCall', '$location',
             var exportFailure = function(response) {
                 $scope.exportBtnText = "Export to XML";
                 console.log("Got failure response: " + JSON.stringify(response));
-            }
+            };
             HttpCall.postText("admin/rawexport", $cookies.get("token"), exportSuccess, exportFailure);
-        };
-
-        $scope.getApproval = function() {
-            HttpCall.postText("admin/getapprovelist", token, function(response) {
-                $scope.users = response.data;
-            }, generalFailure);
         };
 
         $scope.getUsers = function () {
@@ -79,6 +73,6 @@ app.controller('adminCtrl', ['$scope', '$cookies', 'HttpCall', '$location',
                 $scope.showUsers = true;
             };
 
-            HttpCall.postText("admin/getusers", token, getUsersSucess, generalFailure);
+            HttpCall.postText("admin/getusers", $scope.token, getUsersSucess, generalFailure);
         };
 }]);

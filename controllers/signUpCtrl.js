@@ -121,7 +121,7 @@ app.controller("signUpCtrl", ['$scope', '$location', 'HttpCall', function ($scop
                 cont = false;
                 break;
             case noChar:
-                $scope.passErrText = "Password must contain at least on character";
+                $scope.passErrText = "Password must contain at least one character";
                 $scope.passErr = true;
                 cont = false;
                 break;
@@ -138,14 +138,14 @@ app.controller("signUpCtrl", ['$scope', '$location', 'HttpCall', function ($scop
             $scope.rePassErr = false;
         }
 
-        // if (!cont) return;
+         if (!cont) return;
 
 
         var accType = "0";
         if ($scope.isOwner) {
-            accType += "1";
+            accType += "10";
         } else {
-            accType += "0";
+            accType += "01";
         }
 
 

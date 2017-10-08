@@ -14,9 +14,7 @@ app.controller('loginCtrl', ['$scope', '$location', '$rootScope', '$cookies', 'H
             var succCb = function (response) {
                 var token = response.data;
                 console.log("Token: " + token);
-                $cookies.put('token', token, {
-                    path: "/"
-                });
+                $cookies.put('token', token);
                 $cookies.put("loggedIn", "true", {
                     path: "/"
                 });
@@ -26,7 +24,8 @@ app.controller('loginCtrl', ['$scope', '$location', '$rootScope', '$cookies', 'H
 
             var failure = function(response) {
                 console.log("Failure response " + JSON.stringify(response.data));
-                if (response.status == 404) {
+                
+                if (response.status == 401) {
                     $scope.wrongCred = true;
                 }
             };
@@ -37,7 +36,7 @@ app.controller('loginCtrl', ['$scope', '$location', '$rootScope', '$cookies', 'H
         $scope.resetPass = function() {
             window.alert("Just input 3452")
             $location.path("/passreset");
-        }
+        };
 
 
 }])

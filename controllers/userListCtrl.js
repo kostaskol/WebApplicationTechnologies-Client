@@ -2,7 +2,6 @@ var app = angular.module('airbnbApp');
 
 app.controller('userListCtrl', ['$scope', '$location', 'HttpCall', '$cookies',
 		function ($scope, $location, HttpCall, $cookies) {
-        console.log($scope.users);
         $scope.showUser = function (index) {
             console.log("Showing user @ index" + index);
             console.log("User id = " + $scope.users[index].userId);
